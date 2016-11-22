@@ -12,15 +12,12 @@ Router.get('/', function(req, res, next){
 
 
 
-
-
-
 var pool = mysql.createPool({
 	host: 'localhost',
 	user: 'root',
 	password: 'root',
 	connectionLimit: 10,
-	database: 'test'
+	database: 'platform1'
 });
 
 function doquery(sql, values, callbk) {
@@ -40,12 +37,14 @@ function doquery(sql, values, callbk) {
 
 
 Router.post('/get', function(req, res, next){
-	doquery('select * from news', [], function(result){
+	doquery('select * from platform1', [], function(result, fields){
+
 		res.json(result);
-		// console.log(result);
 		// res.status(200).send('abc');
 	});
 });
+
+
 
 
 

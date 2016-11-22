@@ -62,51 +62,63 @@
 
 		getInitialState: function getInitialState() {
 			return {
-				list: {}
+				result: {}
 			};
 		},
 
 		componentDidMount: function componentDidMount() {
-			// console.log('mount did......!');
-
-			$.post('http://localhost:3000/customers/get', {}, this.dataLoaded);
+			$.post('http://localhost:3000/get', {}, this.dataLoaded);
 		},
 
 		dataLoaded: function dataLoaded(data) {
-			this.setState({ list: data });
+			// console.log(data);return;
+			this.setState({ result: data });
 		},
 
 		render: function render() {
 
 			var html = [];
+			var result = this.state.result;
+			var headInner = [];
 
-			for (var i = 0; i < this.state.list.length; i++) {
-				var title = this.state.list[i].title;
-				var slug = this.state.list[i].slug;
-				var text = this.state.list[i].text;
-				var id = this.state.list[i].id;
+			for (var i = 0; i < result.length; i++) {
+				// var name = result[i].name;
+				// var mobile = result[i].mobile;
+				// var referrer = result[i].referrer;
+				// var category = result[i].category;
+				// var url = result[i].url;
+				// var id = result[i].id;
+				var tmp = [];
+				for (var v in result[i]) {
+					if (i == 0) {
+						headInner.push(_react2.default.createElement(
+							'th',
+							null,
+							v
+						));
+					}
+					tmp.push(_react2.default.createElement(
+						'td',
+						null,
+						result[i][v]
+					));
+				}
+
+				if (i == 0) {
+					html.push(_react2.default.createElement(
+						'tr',
+						null,
+						headInner
+					));
+				}
 				html.push(_react2.default.createElement(
-					'li',
-					{ key: id },
-					_react2.default.createElement(
-						'h3',
-						null,
-						title
-					),
-					_react2.default.createElement(
-						'p',
-						null,
-						slug
-					),
-					_react2.default.createElement(
-						'p',
-						null,
-						text
-					)
+					'tr',
+					null,
+					tmp
 				));
 			}
 			return _react2.default.createElement(
-				'p',
+				'table',
 				null,
 				html
 			);
@@ -115,7 +127,7 @@
 	});
 
 	_reactDom2.default.render(_react2.default.createElement(
-		'h1',
+		'div',
 		null,
 		'Hello, React!!!!',
 		_react2.default.createElement('br', null),

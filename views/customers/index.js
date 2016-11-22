@@ -5,15 +5,13 @@ var App = React.createClass({
 
 	getInitialState: function(){
 		return {
-			list: {},
+			result: {},
 		};
 	},
 
 	componentDidMount: function(){
-		// console.log('mount did......!');
-
 		$.post(
-			'http://localhost:3000/customers/get',
+			'http://localhost:3000/get',
 			{},
 			this.dataLoaded
 		);
@@ -21,37 +19,49 @@ var App = React.createClass({
 
 
 	dataLoaded: function(data){
-		this.setState({list: data});
+		// console.log(data);return;
+		this.setState({result: data});
 	},
 
 	render: function(){
 
 		var html = [];
+		var result = this.state.result;
+		var headInner = [];
 
-		for(var i=0; i<this.state.list.length; i++){
-			var title = this.state.list[i].title;
-			var slug = this.state.list[i].slug;
-			var text = this.state.list[i].text;
-			var id = this.state.list[i].id;
-			html.push(<li key={id}>
-				<h3>{title}</h3>
-				<p>{slug}</p>
-				<p>{text}</p>
-				</li>);
+		for(var i=0; i<result.length; i++){
+			// var name = result[i].name;
+			// var mobile = result[i].mobile;
+			// var referrer = result[i].referrer;
+			// var category = result[i].category;
+			// var url = result[i].url;
+			// var id = result[i].id;
+			var tmp=[];
+			for ( var v in result[i]){
+				if(i==0){
+					headInner.push(<th>{v}</th>);
+				}
+				tmp.push(<td>{result[i][v]}</td>);
+			}
+			
+			if(i==0){
+				html.push(<tr>{headInner}</tr>);
+			}
+			html.push(<tr>{tmp}</tr>);
 		}
-		return (<p>
+		return (<table>
 			{html}
-		</p>);
+		</table>);
 	},
 
 
 })
 
-ReactDOM.render(<h1>
+ReactDOM.render(<div>
 
 Hello, React!!!!<br />
 <App />
 
 
-</h1>, document.querySelector('#app'));
+</div>, document.querySelector('#app'));
 
