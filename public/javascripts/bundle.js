@@ -77,19 +77,16 @@
 
 		render: function render() {
 
-			var html = [];
-			var result = this.state.result;
-			var headInner = [];
+			var html = [],
+			    result = this.state.result,
+			    headInner = [],
+			    tbody = [],
+			    thead = [];
 
-			for (var i = 0; i < result.length; i++) {
-				// var name = result[i].name;
-				// var mobile = result[i].mobile;
-				// var referrer = result[i].referrer;
-				// var category = result[i].category;
-				// var url = result[i].url;
-				// var id = result[i].id;
+			for (var i = 0, j = 0; i < result.length; i++) {
 				var tmp = [];
 				for (var v in result[i]) {
+					j++;
 					if (i == 0) {
 						headInner.push(_react2.default.createElement(
 							'th',
@@ -99,28 +96,38 @@
 					}
 					tmp.push(_react2.default.createElement(
 						'td',
-						null,
+						{ title: result[i][v] },
 						result[i][v]
 					));
 				}
 
 				if (i == 0) {
-					html.push(_react2.default.createElement(
-						'tr',
+					thead.push(_react2.default.createElement(
+						'thead',
 						null,
-						headInner
+						_react2.default.createElement(
+							'tr',
+							null,
+							headInner
+						)
 					));
 				}
-				html.push(_react2.default.createElement(
+				tbody.push(_react2.default.createElement(
 					'tr',
 					null,
 					tmp
 				));
 			}
+			tbody = _react2.default.createElement(
+				'tbody',
+				null,
+				tbody
+			);
 			return _react2.default.createElement(
 				'table',
 				null,
-				html
+				thead,
+				tbody
 			);
 		}
 

@@ -10,6 +10,6 @@ a {
 table { color:#444; cursor:default; }
 tr:nth-child(2n+0) { background-color:#f0f0f0; }
 tr:hover { background-color:#e0e0e0; }
-td { max-width:200px; height:1em; overflow: hidden; text-overflow: ellipsis; }
+td { min-width:45px; max-width:200px; height:1em; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; }
 
 

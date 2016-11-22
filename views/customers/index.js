@@ -25,43 +25,35 @@ var App = React.createClass({
 
 	render: function(){
 
-		var html = [];
-		var result = this.state.result;
-		var headInner = [];
+		var html = [],
+		result = this.state.result,
+		headInner = [],
+		tbody = [],
+		thead = [];
 
-		for(var i=0; i<result.length; i++){
-			// var name = result[i].name;
-			// var mobile = result[i].mobile;
-			// var referrer = result[i].referrer;
-			// var category = result[i].category;
-			// var url = result[i].url;
-			// var id = result[i].id;
+		for(var i=0, j=0; i<result.length; i++){
 			var tmp=[];
 			for ( var v in result[i]){
+				j++;
 				if(i==0){
 					headInner.push(<th>{v}</th>);
 				}
-				tmp.push(<td>{result[i][v]}</td>);
+				tmp.push(<td title={result[i][v]}>{result[i][v]}</td>);
 			}
 			
 			if(i==0){
-				html.push(<tr>{headInner}</tr>);
+				thead.push(<thead><tr>{headInner}</tr></thead>);
 			}
-			html.push(<tr>{tmp}</tr>);
+			tbody.push(<tr>{tmp}</tr>);
 		}
-		return (<table>
-			{html}
-		</table>);
+		tbody = <tbody>{tbody}</tbody>;
+		return (<table>{thead}{tbody}</table>);
 	},
-
 
 })
 
 ReactDOM.render(<div>
-
-Hello, React!!!!<br />
-<App />
-
-
+	Hello, React!!!!<br />
+	<App />
 </div>, document.querySelector('#app'));
 

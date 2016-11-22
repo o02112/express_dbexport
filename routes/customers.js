@@ -37,7 +37,13 @@ function doquery(sql, values, callbk) {
 
 
 Router.post('/get', function(req, res, next){
-	doquery('select * from platform1', [], function(result, fields){
+	var sql = "select \
+	name as '名称', mobile as '电话', \
+	date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间', \
+	category as '关键字', user_action as '动作', \
+	url as '地址', referrer as '来源地址' \
+	from platform1"
+	doquery(sql, [], function(result, fields){
 
 		res.json(result);
 		// res.status(200).send('abc');
