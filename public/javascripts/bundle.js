@@ -54,91 +54,24 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _app = __webpack_require__(178);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _exportBtn = __webpack_require__(179);
+
+	var _exportBtn2 = _interopRequireDefault(_exportBtn);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var App = _react2.default.createClass({
-		displayName: 'App',
-
-
-		getInitialState: function getInitialState() {
-			return {
-				result: {}
-			};
-		},
-
-		componentDidMount: function componentDidMount() {
-			$.post('http://localhost:3000/get', {}, this.dataLoaded);
-		},
-
-		dataLoaded: function dataLoaded(data) {
-			// console.log(data);return;
-			this.setState({ result: data });
-		},
-
-		render: function render() {
-
-			var html = [],
-			    result = this.state.result,
-			    headInner = [],
-			    tbody = [],
-			    thead = [];
-
-			for (var i = 0, j = 0; i < result.length; i++) {
-				var tmp = [];
-				for (var v in result[i]) {
-					j++;
-					if (i == 0) {
-						headInner.push(_react2.default.createElement(
-							'th',
-							null,
-							v
-						));
-					}
-					tmp.push(_react2.default.createElement(
-						'td',
-						{ title: result[i][v] },
-						result[i][v]
-					));
-				}
-
-				if (i == 0) {
-					thead.push(_react2.default.createElement(
-						'thead',
-						null,
-						_react2.default.createElement(
-							'tr',
-							null,
-							headInner
-						)
-					));
-				}
-				tbody.push(_react2.default.createElement(
-					'tr',
-					null,
-					tmp
-				));
-			}
-			tbody = _react2.default.createElement(
-				'tbody',
-				null,
-				tbody
-			);
-			return _react2.default.createElement(
-				'table',
-				null,
-				thead,
-				tbody
-			);
-		}
-
-	});
-
 	_reactDom2.default.render(_react2.default.createElement(
-		'div',
-		null,
-		'Hello, React!!!!',
-		_react2.default.createElement('br', null),
-		_react2.default.createElement(App, null)
+	    'div',
+	    null,
+	    _react2.default.createElement(_exportBtn2.default, { value: '\u5BFC\u51FA\u65B0\u6570\u636E', dataCate: 'new' }),
+	    _react2.default.createElement(_exportBtn2.default, { value: '\u5BFC\u51FA\u5168\u90E8\u6570\u636E', dataCate: 'all' }),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(_app2.default, null)
 	), document.querySelector('#app'));
 
 /***/ },
@@ -21527,6 +21460,179 @@
 
 	module.exports = ReactDOMInvalidARIAHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var App = _react2.default.createClass({
+	    displayName: 'App',
+
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            result: {}
+	        };
+	    },
+
+	    componentDidMount: function componentDidMount() {
+	        this.loadData();
+	    },
+
+	    dataLoaded: function dataLoaded(data) {
+	        this.setState({ result: data });
+	    },
+
+	    loadData: function loadData() {
+	        $.post('get', {}, this.dataLoaded);
+	    },
+
+	    render: function render() {
+
+	        var html = [],
+	            result = this.state.result,
+	            headInner = [],
+	            tbody = [],
+	            thead = [];
+
+	        for (var i = 0, j = 0; i < result.length; i++) {
+	            var tmp = [];
+	            for (var v in result[i]) {
+	                if (v == 'is_new') continue;
+	                j++;
+	                if (i == 0) {
+	                    headInner.push(_react2.default.createElement(
+	                        'th',
+	                        null,
+	                        v
+	                    ));
+	                }
+	                tmp.push(_react2.default.createElement(
+	                    'td',
+	                    { title: result[i][v] },
+	                    result[i][v]
+	                ));
+	            }
+
+	            if (i == 0) {
+	                thead.push(_react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        headInner
+	                    )
+	                ));
+	            }
+
+	            if (result[i].is_new.data[0] == 1) {
+	                tbody.push(_react2.default.createElement(
+	                    'tr',
+	                    { className: 'isnew' },
+	                    tmp
+	                ));
+	            } else {
+	                tbody.push(_react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    tmp
+	                ));
+	            }
+	        }
+	        tbody = _react2.default.createElement(
+	            'tbody',
+	            null,
+	            tbody
+	        );
+	        return _react2.default.createElement(
+	            'table',
+	            null,
+	            thead,
+	            tbody
+	        );
+	    }
+
+	});
+
+	module.exports = App;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ExportBtn = _react2.default.createClass({
+	    displayName: 'ExportBtn',
+
+
+	    render: function render() {
+	        var _this = this;
+
+	        return _react2.default.createElement(
+	            'button',
+	            { onClick: function onClick() {
+	                    return _this.exportResource(_this.props.dataCate);
+	                } },
+	            this.props.value
+	        );
+	    },
+
+	    exportResource: function exportResource(dataCate) {
+	        var dataCate = this.props.dataCate;
+	        var thisComponent = this;
+	        $.post('exportResource', { dataCate: dataCate }, function (data) {
+	            if (data.code == 0) {
+	                alert('没有新记录。');
+	            } else {
+	                var data = encodeURIComponent(data),
+	                    dateStr = '',
+	                    date = new Date(),
+	                    hours = date.getHours() + 8;
+	                date.setHours(hours);
+	                dateStr = date.toJSON();
+
+	                var a = document.createElement('a');
+	                a.download = 'newResource-' + dateStr + '.csv';
+	                a.href = "data:text/csv;charset=utf-8," + data;
+	                document.body.append(a);
+	                a.click();
+	                a.remove();
+
+	                // 导出新数据后标记为旧数据
+	                if (dataCate == 'new') thisComponent.markOld();
+	            }
+	        });
+	    },
+
+	    markOld: function markOld() {
+	        $.post('/markOld', function (data) {
+	            if (data.code == 1) {
+	                // 标记为旧成功。
+	                location.reload();
+	            } else {
+	                // 标记记录数为0。
+	            }
+	        });
+	    }
+	});
+
+	module.exports = ExportBtn;
 
 /***/ }
 /******/ ]);
