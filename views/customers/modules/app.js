@@ -1,10 +1,13 @@
 import React from 'react';
+import Message from './message';
 
 var App = React.createClass({
 
     getInitialState: function(){
         return {
             result: {},
+            looping: {},
+
         };
     },
 
@@ -12,9 +15,21 @@ var App = React.createClass({
         this.loadData();
     },
 
-
-    dataLoaded: function(data){
-        this.setState({result: data});
+    loopingFn: function(){
+        let thisComponent = this;
+        $.post(
+            'looping',
+            {},
+            function(data){
+                if(data.code==1){
+                    console.log('looping stoped');
+                    Message.show('top', '有新资源。', 'info', '/', -1);
+                } else {
+                    console.info('looping');
+                    setTimeout(thisComponent.loopingFn, 5000);
+                }
+            }
+        );
     },
 
     loadData: function(){
@@ -24,6 +39,13 @@ var App = React.createClass({
             this.dataLoaded
         );
     },
+
+    dataLoaded: function(data){
+        this.setState({result: data});
+        this.loopingFn();
+        // Message.show('top', '如有新资源，这里将会自动产生新消息提示您。', 'info', '', 3000)
+    },
+
 
     render: function(){
 

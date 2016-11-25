@@ -18,7 +18,7 @@ Router.post('/get', function(req, res, next){
 	category as '关键字', user_action as '动作', 
 	url as '地址', referrer as '来源地址', 
 	is_new 
-	from platform1`;
+	from platform1  order by submitted desc`;
 	mysqlPool.doquery(sql, [], function(result, fields){
 
 		res.json(result);
@@ -37,7 +37,7 @@ Router.post('/exportResource', function(req, res, next){
 	sql = 'select ' + sqlCols + ' from platform1 ';
 
 	if(dataCate == 'new'){ 
-		sql += ' where is_new=1'; 
+		sql += ' where is_new=1  order by submitted desc'; 
 	}
 
 
@@ -68,6 +68,18 @@ Router.post('/markOld', function(req, res, next){
 		} else {
 			res.json({code: 0, message: '更新记录数为0。'})
 		}
+	})
+});
+
+Router.post('/looping', function(req, res, next){
+	var sql = 'select count(*) as count from platform1 where is_new=1';
+	mysqlPool.doquery(sql, [], function(result){
+		if(result[0].count > 0){
+			res.json({code: 1, message: '有新资源产生。'});
+		} else {
+			res.json({code: 0, message: '无新数据。'});
+		}
+		// res.json(result[0].count);
 	})
 });
 
