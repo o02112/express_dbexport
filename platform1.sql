@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2016 年 11 月 24 日 16:55
+-- 生成日期: 2016 年 11 月 25 日 19:18
 -- 服务器版本: 5.5.40
 -- PHP 版本: 5.3.29
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `platform1` (
   `user_action` varchar(32) NOT NULL,
   `is_new` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=155 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=159 ;
 
 --
 -- 转存表中的数据 `platform1`
@@ -57,7 +57,11 @@ INSERT INTO `platform1` (`id`, `submitted`, `name`, `mobile`, `referrer`, `categ
 (151, '2016-11-24 08:31:07', 'ztr', '13333333333', '', '股票', 'http://localhost/singles/single1/php/', 'qqq', b'0'),
 (152, '2016-11-24 08:31:07', 'z', '13333333333', '', '交易中心', 'http://localhost/singles/single1/php/', '1', b'0'),
 (153, '2016-11-24 08:31:07', '12', '13333333333', '', '交易中心', 'http://localhost/singles/single1/php/', '', b'0'),
-(154, '2016-11-24 08:31:07', 'q', '13333333333', '', '交易中心', 'http://localhost/singles/single1/php/', '213', b'0');
+(154, '2016-11-24 08:31:07', 'q', '13333333333', '', '交易中心', 'http://localhost/singles/single1/php/', '213', b'0'),
+(155, '2016-11-25 05:26:41', 'aa', '13333333333', '', '交易中心', 'http://platform1.com/', '24', b'0'),
+(156, '2016-11-25 09:30:43', 'bbbbb', '13333333333', '', '交易中心', 'http://platform1.com/', 'aaaaa', b'0'),
+(157, '2016-11-25 09:30:43', '12', '13333333333', '', '交易中心', 'http://platform1.com/', '', b'0'),
+(158, '2016-11-25 09:50:47', '保鲜膜', '13333333333', '', '股票', 'http://platform1.com/', '休', b'1');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
