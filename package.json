@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "node ./bin/www",
+    "start": "set NODE_ENV=production && pm2 start ./bin/www --node-args='--harmony' --name 'dbexport'"
   },
   "dependencies": {
     "body-parser": "~1.15.2",

@@ -21608,7 +21608,7 @@
 	                dateStr = date.toJSON();
 
 	                var a = document.createElement('a');
-	                a.download = 'newResource-' + dateStr + '.csv';
+	                a.download = dataCate + 'Resource-' + dateStr + '.csv';
 	                a.href = "data:text/csv;charset=utf-8," + data;
 	                document.body.append(a);
 	                a.click();

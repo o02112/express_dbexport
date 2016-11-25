@@ -99,6 +99,10 @@ etag@~1.7.0:
   version "1.7.0"
   resolved "http://registry.npm.taobao.org/etag/download/etag-1.7.0.tgz#03d30b5f67dd6e632d2945d30d6652731a34d5d8"
 
+express-csv@^0.6.0:
+  version "0.6.0"
+  resolved "http://registry.npm.taobao.org/express-csv/download/express-csv-0.6.0.tgz#db792d85b262207e561d6362ba39a1e681e3d503"
+
 express@~4.14.0:
   version "4.14.0"
   resolved "http://registry.npm.taobao.org/express/download/express-4.14.0.tgz#c1ee3f42cdc891fb3dc650a8922d51ec847d0d66"
@@ -161,7 +165,6 @@ iconv-lite@0.4.13:
   resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
 
 inherits@~2.0.1, inherits@2.0.3:
-inherits@2.0.3, inherits@~2.0.1:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/inherits/download/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
 
@@ -331,7 +334,6 @@ string_decoder@~0.10.x:
   version "0.10.31"
   resolved "http://registry.npm.taobao.org/string_decoder/download/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
 
-supervisor:
 supervisor@^0.12.0:
   version "0.12.0"
   resolved "http://registry.npm.taobao.org/supervisor/download/supervisor-0.12.0.tgz#de7e6337015b291851c10f3538c4a7f04917ecc1"
