@@ -5,6 +5,10 @@ var mysqlPool = require('../modules/mysql_pool');
 
 
 Router.get('/', function(req, res, next){
+	res.end();
+});
+
+Router.get('/dbex', function(req, res, next){
 
 	res.render('customers/index');
 
@@ -13,11 +17,11 @@ Router.get('/', function(req, res, next){
 
 Router.post('/get', function(req, res, next){
 	var sql = `select id as '序号', 
+	case when is_new=1 then '1' else '0' end as '新记录', 
 	name as '名称', mobile as '电话', 
 	date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间', 
-	category as '关键字', user_action as '动作', 
-	url as '地址', referrer as '来源地址', 
-	is_new 
+	category as '分类', user_action as '动作', 
+	url as '地址', referrer as '来源地址'
 	from platform1  order by submitted desc`;
 	mysqlPool.doquery(sql, [], function(result, fields){
 
@@ -83,7 +87,32 @@ Router.post('/looping', function(req, res, next){
 	})
 });
 
+Router.post('/addNew', function(req, res, next){
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
+  	var sql = 'insert into platform1 set ?';
+
+	var sql_exists = 'select id from platform1 where mobile=?';
+	var mobile = req.body.mobile;
+
+	mysqlPool.doquery(sql_exists, [mobile], function(result){
+		if(result.length > 0) {
+			res.send('mobile_exists');
+		} else{
+
+		  	mysqlPool.doquery(sql, req.body, function(result){
+
+		  		if( result.insertId > 0 ){
+		  			res.send('insert_success');
+		  		} else {
+		  			res.send('faile');
+		  		}
+		  		
+		  	});
+		}
+	});
+});
 
 
 module.exports = Router;

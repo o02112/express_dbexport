@@ -12,9 +12,31 @@ tbody { border-top:1px solid #eee; }
 tr:nth-child(2n+0) { background-color:#f0f0f0; }
 tr.isnew { background-color:#eaf9d2; }
 th, tr:hover { background-color:#e0e0e0; }
-td { padding:5px; min-width:45px; max-width:200px; height:1em; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; }
+th { min-width:65px; }
+td { padding:5px; max-width:200px; height:1em; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; white-space: nowrap; }
 
 #app { padding: 50px; }
 
 
+.reactable-page-button { 
+    display:inline-block; 
+    width:22px;
+    height:22px;
+    line-height: 22px;
+    text-align:center;
+    border-radius:50%;
+    margin:0 5px;
+    text-decoration: none;
+    }
+.reactable-page-button.reactable-current-page {
+    background-color:#e0e0e0;
+}
+.reactable-pagination tr:hover { background-color:inherit; }
 
+.reactable-header-sortable { cursor:pointer;
+ background: #e0e0e0 url(../../static/images/arrow-down.png) no-repeat 95% center;
+    background-size:9px auto; }
+
+.reactable-header-sortable.reactable-header-sort-desc {
+background-image: url(../../static/images/arrow-up.png);
+}

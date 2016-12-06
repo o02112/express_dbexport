@@ -38,7 +38,7 @@ var ExportBtn = React.createClass({
     },
 
     markOld: function(){
-        $.post('/markOld', function(data){
+        $.post('markOld', function(data){
             if(data.code == 1){
                 // 标记为旧成功。
                 location.reload();
