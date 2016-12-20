@@ -9,9 +9,13 @@ var ExportBtn = React.createClass({
     exportResource: function(dataCate){
         var dataCate = this.props.dataCate;
         var thisComponent = this;
+        var m = 1;
+        if(window.location.href.indexOf('view') > 0){
+            m = 0;
+        }
         $.post(
             'exportResource',
-            { dataCate: dataCate },
+            { dataCate: dataCate , m: m},
             function(data){
                 if(data.code == 0){
                     alert('没有新记录。');

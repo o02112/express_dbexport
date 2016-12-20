@@ -64,9 +64,10 @@
     "core-js": "^2.0.0",
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
-    "reactable": "^0.14.1",
     "react-dom": "^15.0.0",
     "react-redux": "^4.4.6",
+    "reactable": "^0.14.1",
+    "recharts": "^0.19.0",
     "redux": "^3.6.0",
     "redux-devtools": "^3.3.1"
   }
