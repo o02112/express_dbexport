@@ -40,7 +40,7 @@ var App = React.createClass({
                 exportFilter: {
                     fromDate: defaultFilterFromDate,
                     toDate: defaultFilterToDate,
-                    domain: '*',
+                    domain: '',
                 }
             },
             
@@ -51,24 +51,23 @@ var App = React.createClass({
     componentDidMount: function(){
 
         // 默认请求数据
-        if(window.location.href.indexOf('view') > 0 ){
-            $.post( 
-                'get', 
-                //this.state.dataRowsState,
-                {
-                    includePhone: 0,
-                    fromDate: defaultFilterFromDate,
-                    toDate: defaultFilterToDate,
-                    domain: '*',
-                },
-                (data)=> {
-                    this.setState({dataRows: data});
-                }, 'json'
-            );
-        } else {
+        if(window.location.href.indexOf('dbex') > 0 ){
             this.state.dataRowsState.includePhone = 1;
-            // $.post( 'get', {'includePhone': 1},  (data)=>this.setState({dataRows: data}) );
         }
+
+        $.post( 
+            'get', 
+            //this.state.dataRowsState,
+            {
+                includePhone: this.state.dataRowsState.includePhone,
+                fromDate: defaultFilterFromDate,
+                toDate: defaultFilterToDate,
+                domain: '',
+            },
+            (data)=> {
+                this.setState({dataRows: data});
+            }, 'json'
+        );
 
     },
 
@@ -106,10 +105,11 @@ var App = React.createClass({
             <DateField
                 forceValidDate
                 defaultValue={defaultFilterFromDate}
+                updateOnDateClick={true}
                 dateFormat="YYYY-MM-DD HH:mm:ss"
             >
-                  <Calendar
-                    locale="zh-cn" weekStartDay={0}
+                  <Calendar locale="zh-cn" weekStartDay={0}
+                    clearButton={false}
                     weekNumbers={false} style={{padding: 10}}
                     onChange={
                         (dateString) => {
@@ -124,9 +124,12 @@ var App = React.createClass({
             <DateField
                 forceValidDate
                 defaultValue={defaultFilterToDate}
+                updateOnDateClick={true}
                 dateFormat="YYYY-MM-DD HH:mm:ss"
             >
-                  <Calendar locale="zh-cn" weekStartDay={0} weekNumbers={false} style={{padding: 10}} 
+                  <Calendar locale="zh-cn" weekStartDay={0}
+                   clearButton={false}
+                   weekNumbers={false} style={{padding: 10}} 
                     onChange={
                         (dateString) => {
                             this.state.dataRowsState.exportFilter.toDate = dateString;
@@ -137,16 +140,12 @@ var App = React.createClass({
 
             &nbsp;
             
-            <input list="domains" placeholder="地址（example.com）" className="input-text"
+            <input list="domains" placeholder="地址（example.com/hq）" className="input-text"
                 onChange={(e)=>this.state.dataRowsState.exportFilter.domain = e.target.value} />
             <datalist id="domains">
               <option value="gjs.xhzctl.com"></option>
-              <option value="gjs.xhzctl.com"></option>
-              <option value="vip6.98cml.com"></option>
-              <option value="vip66.97cml.net"></option>
+              <option value="gold888.safechaxun.com"></option>
               <option value="vip66.2008cml.net"></option>
-              <option value="vip666.16cml.com"></option>
-              <option value="g.jingu618.cn"></option>
             </datalist>
 
              &nbsp;
@@ -160,14 +159,13 @@ var App = React.createClass({
 
             <Table className="table" 
                 data={data}
-                itemsPerPage={10} pageButtonLimit={8} 
-                sortable={['序号', '时间', '地址']}
+                itemsPerPage={10} pageButtonLimit={10} 
                 noDataText='无记录' 
                 previousPageLabel='上一页' 
                 nextPageLabel='下一页' 
             />
             &nbsp;
-            <span>{this.state.dataRows.length ? ('共 '+this.state.dataRows.length+' 条记录') : ''}，显示前100条记录</span>
+            <span>{ (this.state.dataRows.length === 100) ? '仅显示前100条记录' : '共 '+this.state.dataRows.length+' 条记录' }</span>
 
             <br /><br />
 

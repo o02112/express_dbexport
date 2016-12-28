@@ -21511,7 +21511,7 @@
 	                exportFilter: {
 	                    fromDate: defaultFilterFromDate,
 	                    toDate: defaultFilterToDate,
-	                    domain: '*'
+	                    domain: ''
 	                }
 	            }
 
@@ -21522,21 +21522,20 @@
 	        var _this = this;
 
 	        // 默认请求数据
-	        if (window.location.href.indexOf('view') > 0) {
-	            $.post('get',
-	            //this.state.dataRowsState,
-	            {
-	                includePhone: 0,
-	                fromDate: defaultFilterFromDate,
-	                toDate: defaultFilterToDate,
-	                domain: '*'
-	            }, function (data) {
-	                _this.setState({ dataRows: data });
-	            }, 'json');
-	        } else {
+	        if (window.location.href.indexOf('dbex') > 0) {
 	            this.state.dataRowsState.includePhone = 1;
-	            // $.post( 'get', {'includePhone': 1},  (data)=>this.setState({dataRows: data}) );
 	        }
+
+	        $.post('get',
+	        //this.state.dataRowsState,
+	        {
+	            includePhone: this.state.dataRowsState.includePhone,
+	            fromDate: defaultFilterFromDate,
+	            toDate: defaultFilterToDate,
+	            domain: ''
+	        }, function (data) {
+	            _this.setState({ dataRows: data });
+	        }, 'json');
 	    },
 
 	    render: function render() {
@@ -21578,10 +21577,11 @@
 	                    {
 	                        forceValidDate: true,
 	                        defaultValue: defaultFilterFromDate,
+	                        updateOnDateClick: true,
 	                        dateFormat: 'YYYY-MM-DD HH:mm:ss'
 	                    },
-	                    _react2.default.createElement(_reactDatePicker.Calendar, {
-	                        locale: 'zh-cn', weekStartDay: 0,
+	                    _react2.default.createElement(_reactDatePicker.Calendar, { locale: 'zh-cn', weekStartDay: 0,
+	                        clearButton: false,
 	                        weekNumbers: false, style: { padding: 10 },
 	                        onChange: function onChange(dateString) {
 	                            _this2.state.dataRowsState.exportFilter.fromDate = dateString;
@@ -21594,16 +21594,19 @@
 	                    {
 	                        forceValidDate: true,
 	                        defaultValue: defaultFilterToDate,
+	                        updateOnDateClick: true,
 	                        dateFormat: 'YYYY-MM-DD HH:mm:ss'
 	                    },
-	                    _react2.default.createElement(_reactDatePicker.Calendar, { locale: 'zh-cn', weekStartDay: 0, weekNumbers: false, style: { padding: 10 },
+	                    _react2.default.createElement(_reactDatePicker.Calendar, { locale: 'zh-cn', weekStartDay: 0,
+	                        clearButton: false,
+	                        weekNumbers: false, style: { padding: 10 },
 	                        onChange: function onChange(dateString) {
 	                            _this2.state.dataRowsState.exportFilter.toDate = dateString;
 	                        }
 	                    })
 	                ),
 	                '\xA0',
-	                _react2.default.createElement('input', { list: 'domains', placeholder: '\u5730\u5740\uFF08example.com\uFF09', className: 'input-text',
+	                _react2.default.createElement('input', { list: 'domains', placeholder: '\u5730\u5740\uFF08example.com/hq\uFF09', className: 'input-text',
 	                    onChange: function onChange(e) {
 	                        return _this2.state.dataRowsState.exportFilter.domain = e.target.value;
 	                    } }),
@@ -21611,12 +21614,8 @@
 	                    'datalist',
 	                    { id: 'domains' },
 	                    _react2.default.createElement('option', { value: 'gjs.xhzctl.com' }),
-	                    _react2.default.createElement('option', { value: 'gjs.xhzctl.com' }),
-	                    _react2.default.createElement('option', { value: 'vip6.98cml.com' }),
-	                    _react2.default.createElement('option', { value: 'vip66.97cml.net' }),
-	                    _react2.default.createElement('option', { value: 'vip66.2008cml.net' }),
-	                    _react2.default.createElement('option', { value: 'vip666.16cml.com' }),
-	                    _react2.default.createElement('option', { value: 'g.jingu618.cn' })
+	                    _react2.default.createElement('option', { value: 'gold888.safechaxun.com' }),
+	                    _react2.default.createElement('option', { value: 'vip66.2008cml.net' })
 	                ),
 	                '\xA0',
 	                _react2.default.createElement(
@@ -21629,8 +21628,7 @@
 	            ),
 	            _react2.default.createElement(_reactable.Table, { className: 'table',
 	                data: data,
-	                itemsPerPage: 10, pageButtonLimit: 8,
-	                sortable: ['序号', '时间', '地址'],
+	                itemsPerPage: 10, pageButtonLimit: 10,
 	                noDataText: '\u65E0\u8BB0\u5F55',
 	                previousPageLabel: '\u4E0A\u4E00\u9875',
 	                nextPageLabel: '\u4E0B\u4E00\u9875'
@@ -21639,8 +21637,7 @@
 	            _react2.default.createElement(
 	                'span',
 	                null,
-	                this.state.dataRows.length ? '共 ' + this.state.dataRows.length + ' 条记录' : '',
-	                '\uFF0C\u663E\u793A\u524D100\u6761\u8BB0\u5F55'
+	                this.state.dataRows.length === 100 ? '仅显示前100条记录' : '共 ' + this.state.dataRows.length + ' 条记录'
 	            ),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement('br', null),

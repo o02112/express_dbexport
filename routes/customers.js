@@ -29,12 +29,12 @@ Router.post('/get', function(req, res, next){ // 请求数据
 		includePhone = req.body.includePhone;
 
 	if(includePhone === '1'){
-		var mobile = " , mobile as '电话' ";
+		var mobile = " mobile as '电话',  ";
 	} else {
 		var mobile = '';
 	}
 
-	if(domain !== '*'){
+	if(domain !== ''){
 		domain = " and url like '%"+domain+"%'";
 	} else {
 		domain = '';
@@ -138,7 +138,7 @@ Router.post('/addNew', function(req, res, next){ // 单页提交数据
 
 	var sql_exists = 'select id from platform1 where mobile=?';
 
-	if(req.body.url.indexOf('gold.jingu618.net') > 0) {
+	if(req.body.url.indexOf('jingu618') > 0) {
 		sql_exists = 'select id from platform_jingu618 where mobile=?';
 	}
 
@@ -156,7 +156,7 @@ Router.post('/addNew', function(req, res, next){ // 单页提交数据
 			
 			req.body.remote_ip = remoteIp;
 
-			if(req.body.url.indexOf('gold.jingu618.net') > 0) {
+			if(req.body.url.indexOf('jingu618') > 0) {
 				sql = 'insert into platform_jingu618 set ?';
 			}
 
@@ -196,10 +196,10 @@ Router.post('/addNew', function(req, res, next){ // 单页提交数据
 
 Router.get('/ip', function(req, res){
 	var ip = 
-							// req.headers['x-forwarded-for'] || 
-							req.connection.remoteAddress || 
-							req.socket.remoteAddress || 
-							req.connection.socket.remoteAddress; // ::ffff:192.168.1.104
+		// req.headers['x-forwarded-for'] || 
+		req.connection.remoteAddress || 
+		req.socket.remoteAddress || 
+		req.connection.socket.remoteAddress; // ::ffff:192.168.1.104
 			
 
 	res.send(ip);
