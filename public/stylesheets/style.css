@@ -36,11 +36,11 @@ td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-br
 .reactable-pagination tr:hover { background-color:inherit; }
 
 .reactable-header-sortable { cursor:pointer;
- background: #e0e0e0 url(../../static/images/arrow-down.png) no-repeat 95% center;
+ background: #e0e0e0 url(../../public/images/arrow-down.png) no-repeat 95% center;
     background-size:9px auto; }
 
 .reactable-header-sortable.reactable-header-sort-desc {
-background-image: url(../../static/images/arrow-up.png);
+background-image: url(../../public/images/arrow-up.png);
 }
 
 .input-text { padding:5px; border:1px solid gray; }

@@ -102,19 +102,6 @@ var App = React.createClass({
         
         <div className="t-right">
 
-            <input list="domains" placeholder="地址（example.com）" className="input-text"
-                onChange={(e)=>this.state.dataRowsState.exportFilter.domain = e.target.value} />
-            <datalist id="domains">
-              <option value="gjs.xhzctl.com"></option>
-              <option value="gjs.xhzctl.com"></option>
-              <option value="vip6.98cml.com"></option>
-              <option value="vip66.97cml.net"></option>
-              <option value="vip66.2008cml.net"></option>
-              <option value="vip666.16cml.com"></option>
-              <option value="g.jingu618.cn"></option>
-            </datalist>
-
-             &nbsp;
 
             <DateField
                 forceValidDate
@@ -149,6 +136,20 @@ var App = React.createClass({
             </DateField>
 
             &nbsp;
+            
+            <input list="domains" placeholder="地址（example.com）" className="input-text"
+                onChange={(e)=>this.state.dataRowsState.exportFilter.domain = e.target.value} />
+            <datalist id="domains">
+              <option value="gjs.xhzctl.com"></option>
+              <option value="gjs.xhzctl.com"></option>
+              <option value="vip6.98cml.com"></option>
+              <option value="vip66.97cml.net"></option>
+              <option value="vip66.2008cml.net"></option>
+              <option value="vip666.16cml.com"></option>
+              <option value="g.jingu618.cn"></option>
+            </datalist>
+
+             &nbsp;
 
             <button onClick={this.doFilter} >筛选</button>
             &nbsp;
