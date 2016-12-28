@@ -2,6 +2,7 @@ module.exports = {
 	entry: {
 		bundle_customers: './customers/index.js',
 		bundle_domains: './domains/index.js',
+		bundle_test: './test/index.js',
 	},
 	output: {
 		filename: '[name].js',

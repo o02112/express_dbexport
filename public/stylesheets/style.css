@@ -6,6 +6,7 @@ body {
 a {
   color: #00B7FF;
 }
+.t-right { text-align: right; }
 
 table { cursor:default; color:#444; border-top:1px solid #eee; border-bottom:8px solid #eee; }
 tbody { border-top:1px solid #eee; }
@@ -17,6 +18,7 @@ td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-br
 
 #app { padding: 50px; }
 
+.table { width:100%; }
 
 .reactable-page-button { 
     display:inline-block; 
@@ -40,3 +42,5 @@ td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-br
 .reactable-header-sortable.reactable-header-sort-desc {
 background-image: url(../../static/images/arrow-up.png);
 }
+
+.input-text { padding:5px; border:1px solid gray; }

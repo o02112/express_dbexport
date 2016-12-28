@@ -54,7 +54,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _app = __webpack_require__(643);
+	var _app = __webpack_require__(705);
 
 	var _app2 = _interopRequireDefault(_app);
 
@@ -21915,7 +21915,69 @@
 /* 640 */,
 /* 641 */,
 /* 642 */,
-/* 643 */
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
+/* 655 */,
+/* 656 */,
+/* 657 */,
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */,
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */,
+/* 678 */,
+/* 679 */,
+/* 680 */,
+/* 681 */,
+/* 682 */,
+/* 683 */,
+/* 684 */,
+/* 685 */,
+/* 686 */,
+/* 687 */,
+/* 688 */,
+/* 689 */,
+/* 690 */,
+/* 691 */,
+/* 692 */,
+/* 693 */,
+/* 694 */,
+/* 695 */,
+/* 696 */,
+/* 697 */,
+/* 698 */,
+/* 699 */,
+/* 700 */,
+/* 701 */,
+/* 702 */,
+/* 703 */,
+/* 704 */,
+/* 705 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21930,11 +21992,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _addDomain = __webpack_require__(644);
+	var _addDomain = __webpack_require__(706);
 
 	var _addDomain2 = _interopRequireDefault(_addDomain);
 
-	var _domainList = __webpack_require__(645);
+	var _domainList = __webpack_require__(707);
 
 	var _domainList2 = _interopRequireDefault(_domainList);
 
@@ -21970,18 +22032,6 @@
 	            }.bind(this));
 	        }
 	    }, {
-	        key: 'handleAddDomain',
-	        value: function handleAddDomain(domain) {
-	            var component = this;
-	            // var domain = this.refs.createInput.value;
-	            $.post('./add', { domain: domain }, function (data) {
-	                if (data === 'ok') {
-	                    component.state.domainList.push({ url: domain });
-	                    component.setState({ domainList: component.state.domainList });
-	                }
-	            });
-	        }
-	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -21992,10 +22042,28 @@
 	                    null,
 	                    ' domains app'
 	                ),
-	                _react2.default.createElement(_addDomain2.default, { handleCreate: this.handleAddDomain.bind(this) }),
-	                _react2.default.createElement(_domainList2.default, { data: this.state.domainList })
+	                _react2.default.createElement(_addDomain2.default, { handleCreate: this.createDomain.bind(this) }),
+	                _react2.default.createElement(_domainList2.default, { domains: this.state.domainList })
 	            );
 	        }
+	    }, {
+	        key: 'createDomain',
+	        value: function createDomain(domain, category, seo_name) {
+	            var component = this;
+	            // var domain = this.refs.createInput.value;
+	            $.post('./add', { domain: domain, category: category, seo_name: seo_name }, function (data) {
+	                if (data.affectedRows === 1) {
+	                    component.state.domainList.push({ domain: domain, category: category, seo_name: seo_name });
+	                    component.setState({ domainList: component.state.domainList });
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'saveDomain',
+	        value: function saveDomain() {}
+	    }, {
+	        key: 'deleteDomain',
+	        value: function deleteDomain() {}
 	    }]);
 
 	    return App;
@@ -22004,10 +22072,10 @@
 	exports.default = App;
 
 /***/ },
-/* 644 */
+/* 706 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -22037,24 +22105,31 @@
 	    }
 
 	    _createClass(AddDomain, [{
-	        key: "handleCreate",
+	        key: 'handleCreate',
 	        value: function handleCreate(e) {
 	            e.preventDefault();
-	            var domain = this.refs.createInput.value;
-	            this.props.handleCreate(domain);
+	            var domain = this.refs.domainInput;
+	            var category = this.refs.categoryInput;
+	            var seoName = this.refs.seoInput;
+	            this.props.handleCreate(domain.value, category.value, seoName.value);
+
+	            domain.value = category.value = seoName.value = '';
+
 	            // console.log(this.refs.createInput.value);
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    "form",
-	                    { onSubmit: this.handleCreate.bind(this), id: "addDomainForm" },
-	                    _react2.default.createElement("input", { type: "text", placeholder: "http://www.baidu.com/", ref: "createInput" }),
-	                    _react2.default.createElement("input", { type: "submit", value: "\u6DFB\u52A0" })
+	                    'form',
+	                    { onSubmit: this.handleCreate.bind(this), id: 'addDomainForm' },
+	                    _react2.default.createElement('input', { type: 'text', placeholder: 'http://www.example.com/', ref: 'domainInput' }),
+	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u5206\u7C7B\uFF1A\u8D35\u91D1\u5C5E', ref: 'categoryInput' }),
+	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u5F15\u64CE\u540D\u79F0', ref: 'seoInput' }),
+	                    _react2.default.createElement('input', { type: 'submit', value: '\u6DFB\u52A0' })
 	                )
 	            );
 	        }
@@ -22066,7 +22141,7 @@
 	exports.default = AddDomain;
 
 /***/ },
-/* 645 */
+/* 707 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22080,6 +22155,14 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _domainListHead = __webpack_require__(708);
+
+	var _domainListHead2 = _interopRequireDefault(_domainListHead);
+
+	var _domainListItem = __webpack_require__(709);
+
+	var _domainListItem2 = _interopRequireDefault(_domainListItem);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22104,22 +22187,33 @@
 	            this.render();
 	        }
 	    }, {
+	        key: 'rerender',
+	        value: function rerender(id) {
+	            var domains = this.props.domains;
+	            for (var i = 0; i < domains.length; i++) {}
+	        }
+	    }, {
+	        key: 'renderItems',
+	        value: function renderItems() {
+	            var html = [];
+	            var domains = this.props.domains;
+	            for (var i = 0; i < domains.length; i++) {
+	                html.push(_react2.default.createElement(_domainListItem2.default, { key: i, domain: domains[i], rerender: this.rerender }));
+	            }
+	            return html;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var html = [];
-	            var domainList = this.props.data;
-
-	            for (var i = 0; i < domainList.length; i++) {
-	                html.push(_react2.default.createElement(
-	                    'li',
-	                    null,
-	                    domainList[i].url
-	                ));
-	            }
 	            return _react2.default.createElement(
-	                'ul',
+	                'table',
 	                null,
-	                html
+	                _react2.default.createElement(_domainListHead2.default, null),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    this.renderItems()
+	                )
 	            );
 	        }
 	    }]);
@@ -22128,6 +22222,233 @@
 	}(_react2.default.Component);
 
 	exports.default = DomainList;
+
+/***/ },
+/* 708 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DomainListHead = function (_React$Component) {
+	    _inherits(DomainListHead, _React$Component);
+
+	    function DomainListHead() {
+	        _classCallCheck(this, DomainListHead);
+
+	        return _possibleConstructorReturn(this, (DomainListHead.__proto__ || Object.getPrototypeOf(DomainListHead)).apply(this, arguments));
+	    }
+
+	    _createClass(DomainListHead, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'thead',
+	                null,
+	                _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u57DF\u540D'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u5206\u7C7B'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u641C\u7D22\u5F15\u64CE'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u64CD\u4F5C'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return DomainListHead;
+	}(_react2.default.Component);
+
+	exports.default = DomainListHead;
+
+/***/ },
+/* 709 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DomainListItem = function (_React$Component) {
+	    _inherits(DomainListItem, _React$Component);
+
+	    function DomainListItem(props) {
+	        _classCallCheck(this, DomainListItem);
+
+	        var _this2 = _possibleConstructorReturn(this, (DomainListItem.__proto__ || Object.getPrototypeOf(DomainListItem)).call(this, props));
+
+	        _this2.state = {
+	            data: props.domain,
+	            isEditing: false
+	        };
+	        return _this2;
+	    }
+
+	    _createClass(DomainListItem, [{
+	        key: 'handleEdit',
+	        value: function handleEdit() {
+	            this.state.isEditing = true;
+	            this.setState(this.state);
+	        }
+	    }, {
+	        key: 'handleDelete',
+	        value: function handleDelete() {
+	            var _this = this;
+	            $.post('./delete', { id: this.state.data.id }, function (data) {
+	                if (data === 'deleted') {
+	                    _this.props.rerender(this.state.data.id);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'saveDomain',
+	        value: function saveDomain(e) {
+	            e.preventDefault();
+
+	            var sendData = {
+	                id: this.refs.id.value,
+	                domain: this.refs.domain.value,
+	                category: this.refs.category.value,
+	                seo_name: this.refs.seo_name.value
+	            };
+	            var _this = this;
+
+	            $.post('./update', sendData, function (data) {
+	                if (data === 'updated') {
+	                    this.state.data = sendData;
+	                    this.state.isEditing = false;
+	                    this.setState(this.state);
+	                }
+	            }.bind(this));
+	        }
+	    }, {
+	        key: 'renderItem',
+	        value: function renderItem() {
+
+	            if (this.state.isEditing) {
+	                return _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                        'td',
+	                        { colSpan: '4' },
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.saveDomain.bind(this) },
+	                            _react2.default.createElement('input', { type: 'hidden', ref: 'id', defaultValue: this.state.data.id }),
+	                            _react2.default.createElement('input', { type: 'text', ref: 'domain', defaultValue: this.state.data.domain }),
+	                            _react2.default.createElement('input', { type: 'text', ref: 'category', defaultValue: this.state.data.category }),
+	                            _react2.default.createElement('input', { type: 'text', ref: 'seo_name', defaultValue: this.state.data.seo_name }),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'submit' },
+	                                '\u4FDD\u5B58'
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                null,
+	                                '\u53D6\u6D88'
+	                            )
+	                        )
+	                    )
+	                );
+	            }
+
+	            return _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.state.data.domain
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.state.data.category
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.state.data.seo_name
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { onClick: this.handleEdit.bind(this) },
+	                        '\u7F16\u8F91'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { onClick: this.handleDelete.bind(this) },
+	                        '\u5220\u9664'
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return this.renderItem();
+	        }
+	    }]);
+
+	    return DomainListItem;
+	}(_react2.default.Component);
+
+	exports.default = DomainListItem;
 
 /***/ }
 /******/ ]);

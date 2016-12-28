@@ -19,29 +19,39 @@ class App extends React.Component{
         }.bind(this));
     }
 
-    handleAddDomain(domain){
+
+
+    render() {
+        return (<div>
+            <h1> domains app</h1>
+            <AddDomain handleCreate={this.createDomain.bind(this)} />
+
+            <DomainList domains={this.state.domainList} />
+
+        </div>);
+    }
+
+    createDomain(domain, category, seo_name){
         var component = this;
         // var domain = this.refs.createInput.value;
         $.post(
             './add',
-            { domain },
+            { domain: domain, category: category, seo_name: seo_name },
              function(data){
-                if(data === 'ok'){
-                    component.state.domainList.push({url:domain});
+                if(data.affectedRows === 1){
+                    component.state.domainList.push({domain:domain, category: category, seo_name: seo_name});
                     component.setState({domainList:component.state.domainList })
                 }
         });
     }
 
-    render() {
-        return (<div>
-            <h1> domains app</h1>
-            <AddDomain handleCreate={this.handleAddDomain.bind(this)} />
-
-            <DomainList data={this.state.domainList} />
-
-        </div>);
+    saveDomain(){
     }
+
+    deleteDomain(){
+
+    }
+
 }
 
 export default App;

@@ -1,56 +1,64 @@
 import React from 'react';
 
-var ExportBtn = React.createClass({
+class ExportBtn extends React.Component {
 
-    render: function(){
-        return (<button onClick={()=>this.exportResource(this.props.dataCate)}>{this.props.value}</button>);
-    },
+    render(){
+        return (<button onClick={this.exportResource.bind(this)}>{this.props.value}</button>); // /
+    }
 
-    exportResource: function(dataCate){
-        var dataCate = this.props.dataCate;
-        var thisComponent = this;
-        var m = 1;
-        if(window.location.href.indexOf('view') > 0){
-            m = 0;
-        }
+    exportResource(){
+        
+        let queryData = this.props.queryData,
+            dataCate = this.props.dataCate,
+            includePhone = queryData.includePhone;
+
         $.post(
             'exportResource',
-            { dataCate: dataCate , m: m},
-            function(data){
+            { 
+                dataCate: dataCate , 
+                includePhone: includePhone,
+                fromDate: queryData.exportFilter.fromDate,
+                toDate: queryData.exportFilter.toDate
+            },
+            (data) => {
                 if(data.code == 0){
                     alert('没有新记录。');
                 } else {
-                    var data = encodeURIComponent(data),
-                    dateStr = '',
-                    date = new Date(),
-                    hours =  date.getHours() + 8;
-                    date.setHours(hours);
-                    dateStr = date.toJSON();
-
-                    var a = document.createElement('a');
-                    a.download = dataCate+'Resource-'+dateStr+'.csv';
-                    a.href = "data:text/csv;charset=utf-8,"+data;
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
+                    this.exportData(data);
 
                     // 导出新数据后标记为旧数据
-                    if(dataCate == 'new') thisComponent.markOld();
+                    if(this.props.dataCate === 'new') this.markOld();
                 }
             }
         );
-    },
+    }
 
-    markOld: function(){
+    exportData(data){
+        var data = encodeURIComponent(data),
+        dateStr = '',
+        date = new Date(),
+        hours =  date.getHours() + 8;
+        date.setHours(hours);
+        dateStr = date.toJSON();
+
+        var a = document.createElement('a');
+        a.download = this.props.dataCate+'Resource-'+dateStr+'.csv';
+        a.href = "data:text/csv;charset=utf-8,"+data;
+        document.body.append(a);
+        a.click();
+        a.remove();
+    }
+
+    markOld(){
         $.post('markOld', function(data){
             if(data.code == 1){
                 // 标记为旧成功。
                 location.reload();
             } else {
-                // 标记记录数为0。
+                // 标记旧记录数为0。
             }
         })
     }
-});
+};
 
 module.exports = ExportBtn;

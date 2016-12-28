@@ -21,25 +21,37 @@ Router.get('/view', function(req, res, next){
 });
 
 
-Router.post('/get', function(req, res, next){ // 全部数据
-	if(req.body.m === '1'){
-		var sql = `select id as '序号', 
-		case when is_new=1 then '1' else '0' end as '新记录', 
-		name as '名称', mobile as '电话', 
-		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间', 
-		category as '分类', user_action as '动作', 
-		url as '地址', referrer as '来源地址'
-		from platform1  order by submitted desc`;
-	} else {
-		var sql = `select id as '序号', 
-		case when is_new=1 then '1' else '0' end as '新记录', 
-		name as '名称', 
-		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间', 
-		category as '分类', user_action as '动作', 
-		url as '地址', referrer as '来源地址'
-		from platform1  order by submitted desc`;
+Router.post('/get', function(req, res, next){ // 请求数据
 
+	var fromDate = req.body.fromDate,
+		toDate = req.body.toDate,
+		domain = req.body.domain,
+		includePhone = req.body.includePhone;
+
+	if(includePhone === '1'){
+		var mobile = " , mobile as '电话' ";
+	} else {
+		var mobile = '';
 	}
+
+	if(domain !== '*'){
+		domain = " and url like '%"+domain+"%'";
+	} else {
+		domain = '';
+	}
+
+	var where = " where str_to_date(submitted, '%Y-%m-%d %H:%i:%s') >= '" + fromDate +"' ";
+		where += " and str_to_date(submitted, '%Y-%m-%d %H:%i:%s') <= '" + toDate +"' ";
+		where += domain;
+
+	var sql = "select id as '序号',  \
+		case when is_new=1 then '1' else '0' end as '新记录', \
+		name as '名称', "+ mobile + " \
+		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间',  \
+		category as '分类', user_action as '动作',  \
+		url as '地址', referrer  as '来源地址' \
+		from platform1 "+ where +" order by submitted desc limit 0, 100 ";
+
 	mysqlPool.doquery(sql, [], function(result, fields){
 
 		res.json(result);
@@ -48,27 +60,33 @@ Router.post('/get', function(req, res, next){ // 全部数据
 });
 
 Router.post('/exportResource', function(req, res, next){ // 导出
-
 	var dataCate = req.body.dataCate;
-	if(req.body.m === '1'){
-		var sqlCols = ` id as "序号", name as "名称", 
-			mobile as "电话", 
-			category as "分类", 
-			user_action as "动作", 
-			date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间" `;
-	} else {
-		var sqlCols = ` id as "序号", name as "名称", 
-			category as "分类", 
-			user_action as "动作", 
-			date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间" `;
+	var mobile = '';
+
+	if(req.body.includePhone === '1'){
+		var mobile = ' mobile as "电话", ';
 	}
 
-	var sql = 'select ' + sqlCols + ' from platform1 ';
+	var sqlCols = 'id as "序号", name as "名称", ' + mobile +
+		' category as "分类", \
+		 user_action as "动作", \
+		 date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间", \
+		 url as "地址" ';
 
-	if(dataCate == 'new'){ 
-		sql += ' where is_new=1  order by submitted desc'; 
-	}
+	var sql = 'select ' + sqlCols + ' from platform1  ';
 
+	if(dataCate === 'filter'){ // 按筛选规则导出
+		var fromDate = req.body.fromDate;
+		var toDate = req.body.toDate;
+		var where = " where str_to_date(submitted, '%Y-%m-%d %H:%i:%s') >= '" + fromDate +"' ";
+			where += " and str_to_date(submitted, '%Y-%m-%d %H:%i:%s') <= '" + toDate +"' ";
+		sql += where;
+
+	} else if(dataCate === 'new'){ // 导出新数据
+		sql += ' where is_new=1 '; 
+	} 
+
+	sql += ' order by submitted desc';
 
 	mysqlPool.doquery(sql, [], function(result, fields){
 		if(result.length < 1) {

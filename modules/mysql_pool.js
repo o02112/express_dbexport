@@ -11,7 +11,7 @@ var pool = mysql.createPool({
 pool.doquery = function(sql, values, callbk) {
     if(!sql || !values) return false;
 
-    pool.getConnection(function(err, connection){
+    query = pool.getConnection(function(err, connection){
         if(err) throw err;
         connection.query(sql, values, function(err, result){
             if(err) throw err;
