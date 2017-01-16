@@ -1,0 +1,129 @@
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">统计报告</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-wrench"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a data-count="today">从今天</a></li>
+                    <li><a data-count="yestoday">从昨天</a></li>
+                    <li><a data-count="week">近7天</a></li>
+                    <li><a data-count="month">近30天</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#q=/customers/datatable">查看数据表</a></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <p class="text-center">
+                    <strong>提交总计: 
+                      <span id="from-date"></span>
+                       - 
+                      <span id="to-date"></span>
+                    </strong>
+                  </p>
+
+                  <div class="chart">
+                    <!-- Sales Chart Canvas -->
+                    <canvas id="salesChart" style="height: 250px;"></canvas>
+                  </div>
+                  <!-- /.chart-responsive -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4" >
+                  <p class="text-center">
+                    <strong>各地址提交总计（<span id="count-title">从昨天</span>）</strong>
+                  </p>
+                  
+                  <div id="countings"></div>
+
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+      <!-- /.row -->
+
+
+<!-- ChartJS 1.0.1 -->
+<script src="/public/plugins/chartjs/Chart.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/public/dist/js/pages/dashboard2.js"></script>
+<script>
+$(function(){
+
+  // 各地址提交总计
+  $('.dropdown-menu li a').click(function(){
+    var how = $(this).attr('data-count');
+    $('#count-title').text($(this).text());
+    handleClick(how);
+  });
+
+  handleClick('yestoday');
+  function handleClick(how){
+    how = how || 'yestoday';
+    var html = '';
+    var colors = ['green', 'red', 'aquq', 'yellow'];
+    var comparePercent = '';
+
+    // 获取域名列表
+    $.post(
+      '/domains/count/'+how, 
+      function(data){
+        var maxTotal = theMaxTotal(data);
+
+        for(var i=0, j=0;i<data.length; i++){
+          
+          if(j>=colors.length) j=0;
+
+          comparePercent = data[i].total / maxTotal * 100 + '%';
+
+          html += '<div class="progress-group"> \
+            <span class="progress-text">'+ data[i].domain +'</span> \
+            <span class="progress-number"><b>'+data[i].total+'</b>/'+maxTotal+'</span> \
+            <div class="progress sm"> \
+              <div class="progress-bar progress-bar-'+ colors[j] +'" style="width: '+ comparePercent +'"></div> \
+            </div> \
+          </div>';
+
+          j++;
+        }
+      $('#countings').html(html);
+    });
+
+  }
+
+
+
+  function theMaxTotal(arr){
+    var tmpTotal = 0;
+    for(var i=0; i<arr.length; i++){
+      if(arr[i].total > tmpTotal){
+        tmpTotal = arr[i].total;
+      }
+    }
+    return tmpTotal;
+  }
+
+
+
+
+});
+</script>

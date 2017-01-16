@@ -35,7 +35,7 @@ class App extends React.Component{
         var component = this;
         // var domain = this.refs.createInput.value;
         $.post(
-            './add',
+            '/domains/add',
             { domain: domain, category: category, seo_name: seo_name },
              function(data){
                 if(data.affectedRows === 1){

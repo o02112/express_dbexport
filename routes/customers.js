@@ -4,9 +4,9 @@ var csv = require('express-csv');
 var mysqlPool = require('../modules/mysql_pool');
 
 
-Router.get('/', function(req, res, next){
-	res.end();
-});
+// Router.get('/', function(req, res, next){
+// 	res.end();
+// });
 
 Router.get('/dbex', function(req, res, next){
 
@@ -14,7 +14,7 @@ Router.get('/dbex', function(req, res, next){
 
 });
 
-Router.get('/view', function(req, res, next){
+Router.get('/datatable', function(req, res, next){
 
 	res.render('customers/index');
 
@@ -23,7 +23,8 @@ Router.get('/view', function(req, res, next){
 
 Router.post('/get', function(req, res, next){ // 请求数据
 
-	var fromDate = req.body.fromDate,
+	var dbTable = 'platform1',
+		fromDate = req.body.fromDate,
 		toDate = req.body.toDate,
 		domain = req.body.domain,
 		includePhone = req.body.includePhone;
@@ -32,6 +33,10 @@ Router.post('/get', function(req, res, next){ // 请求数据
 		var mobile = " mobile as '电话',  ";
 	} else {
 		var mobile = '';
+	}
+
+	if(domain.indexOf('jingu618') > 0){
+		dbTable = 'platform_jingu618';
 	}
 
 	if(domain !== ''){
@@ -50,7 +55,7 @@ Router.post('/get', function(req, res, next){ // 请求数据
 		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间',  \
 		category as '分类', user_action as '动作',  \
 		url as '地址', referrer  as '来源地址' \
-		from platform1 "+ where +" order by submitted desc limit 0, 100 ";
+		from "+ dbTable + where +" order by submitted desc "; // limit 0, 100 ";
 
 	mysqlPool.doquery(sql, [], function(result, fields){
 
@@ -60,8 +65,9 @@ Router.post('/get', function(req, res, next){ // 请求数据
 });
 
 Router.post('/exportResource', function(req, res, next){ // 导出
-	var dataCate = req.body.dataCate;
-	var mobile = '';
+	var dataCate = req.body.dataCate,
+		dbTable = 'platform1'
+		mobile = '';
 
 	if(req.body.includePhone === '1'){
 		var mobile = ' mobile as "电话", ';
@@ -73,13 +79,30 @@ Router.post('/exportResource', function(req, res, next){ // 导出
 		 date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间", \
 		 url as "地址" ';
 
-	var sql = 'select ' + sqlCols + ' from platform1  ';
+	var sql = 'select ' + sqlCols + ' from ' + dbTable;
 
 	if(dataCate === 'filter'){ // 按筛选规则导出
 		var fromDate = req.body.fromDate;
 		var toDate = req.body.toDate;
+		var domain = req.body.domain;
+
+
+		if(domain.indexOf('jingu618') > 0){
+			dbTable = 'platform_jingu618';
+		}
+
+		if(domain !== ''){
+			domain = " and url like '%"+domain+"%'";
+		} else {
+			domain = '';
+		}
+
+		sql = 'select ' + sqlCols + ' from ' + dbTable;
+
 		var where = " where str_to_date(submitted, '%Y-%m-%d %H:%i:%s') >= '" + fromDate +"' ";
-			where += " and str_to_date(submitted, '%Y-%m-%d %H:%i:%s') <= '" + toDate +"' ";
+		where += " and str_to_date(submitted, '%Y-%m-%d %H:%i:%s') <= '" + toDate +"' ";
+		where += domain;
+			
 		sql += where;
 
 	} else if(dataCate === 'new'){ // 导出新数据

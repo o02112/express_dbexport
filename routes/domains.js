@@ -1,6 +1,7 @@
 var express = require('express');
 var Router = express.Router();
 var mysqlPool = require('../modules/mysql_pool');
+var utility = require('../modules/utility');
 
 
 Router.get('/', function(req, res){
@@ -9,6 +10,67 @@ Router.get('/', function(req, res){
 
 
 
+
+Router.post('/count/:how', function(req, res){
+    var table_view = 'count_' + req.params.how;
+    var sql = 'select domain, total from ' + table_view;
+    
+    mysqlPool.doquery(sql, [], function(result, fields){
+        res.json(result);
+    });
+});
+
+Router.post('/countAll/:days', function(req, res){
+    var d = new Date(), year, month, day;
+    var days = parseInt(req.params.days);
+    var resultObj = {
+        data: [],
+        date: []
+    };
+    var i = 0;
+    
+    loopQuery(i);
+
+    function loopQuery(i){
+        i++;
+        if(i > days){
+            res.send(resultObj);
+            return;
+        } 
+
+
+        year = d.getFullYear();
+        month = utility.preZero(d.getMonth() + 1);
+        day = utility.preZero(d.getDate());
+
+        resultObj.date.push(year+'.'+month+'.'+day);
+
+        d.setDate(d.getDate()-1);
+
+
+        var sql = 'select count(*) as count from platform1 where submitted like ';
+            sql += ' "'+year+'-'+month+'-'+day+'%"';
+
+        mysqlPool.doquery(sql, [], function(result, fields){
+            resultObj.data = resultObj.data.concat(result);
+            loopQuery(i);
+        });
+    }
+
+
+    // function preZero(num, length){
+    //     length = length || 2;
+    //     num = num +'';
+    //     var str = '';
+    //     if(num.length < length) {
+    //         for(var i=0;i<(length-num.length); i++){
+    //             str += '0';
+    //         }
+    //     }
+    //     return str + num;
+    // }
+
+});
 
 Router.post('/list', function(req, res){
     var sql = 'select id, domain, category, seo_name from domains';
@@ -57,6 +119,7 @@ Router.post('/update', function(req, res){
         // res.send(result);
     });
 });
+
 
 
 module.exports = Router;

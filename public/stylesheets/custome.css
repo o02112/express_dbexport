@@ -1,0 +1,5 @@
+.login-page, .register-page { padding-top:1px; }
+.login-logo, .register-logo { cursor:default; }
+
+a { cursor:pointer; }
+

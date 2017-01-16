@@ -5,9 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
+
+var index = require('./routes/index');
 var test = require('./routes/test');
 var domains = require('./routes/domains');
 var customers = require('./routes/customers');
+var users = require('./routes/users');
 
 var app = express();
 
@@ -23,9 +27,44 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static( path.join(__dirname, 'public')));
 
+
+
+
+// Use the session middleware
+// 登陆验证
+app.use(session({
+ secret: 'zctl.secret', 
+ resave: false,
+ saveUninitialized: false
+ // cookie: { maxAge: 3600000 }
+}));
+
+app.use(function(req, res, next){
+    var sess = req.session;
+    var reg = /\/users\//; // 用户登录、注册等
+    // var reg_socket = /\/socket.io\//;
+    var reg_addNew = /\/customers\/addNew/; // 单页上的表单提交
+
+    if (
+      sess.isLogin ||
+      reg.test(req.path) ||
+      // reg_socket.test(req.path) ||
+      reg_addNew.test(req.path) 
+    ) {
+      next();
+    } else {
+      res.redirect('/users/login');
+    }
+});
+
+
+
+app.use('/', index);
 app.use('/test', test);
 app.use('/domains', domains);
-app.use('/', customers);
+app.use('/customers', customers);
+app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

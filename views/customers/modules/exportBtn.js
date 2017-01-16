@@ -13,12 +13,13 @@ class ExportBtn extends React.Component {
             includePhone = queryData.includePhone;
 
         $.post(
-            'exportResource',
+            '/customers/exportResource',
             { 
                 dataCate: dataCate , 
                 includePhone: includePhone,
                 fromDate: queryData.exportFilter.fromDate,
-                toDate: queryData.exportFilter.toDate
+                toDate: queryData.exportFilter.toDate,
+                domain: queryData.exportFilter.domain
             },
             (data) => {
                 if(data.code == 0){
@@ -50,7 +51,7 @@ class ExportBtn extends React.Component {
     }
 
     markOld(){
-        $.post('markOld', function(data){
+        $.post('/customers/markOld', function(data){
             if(data.code == 1){
                 // 标记为旧成功。
                 location.reload();

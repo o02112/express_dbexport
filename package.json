@@ -13,9 +13,11 @@
     "ejs": "^2.5.2",
     "express": "~4.14.0",
     "express-csv": "^0.6.0",
+    "express-session": "^1.14.2",
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
     "serve-favicon": "~2.3.0",
+    "socket.io": "^1.7.2",
     "supervisor": "^0.12.0"
   }
 }

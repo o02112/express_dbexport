@@ -56,7 +56,7 @@ var App = React.createClass({
         }
 
         $.post( 
-            'get', 
+            '/customers/get', 
             //this.state.dataRowsState,
             {
                 includePhone: this.state.dataRowsState.includePhone,
@@ -146,6 +146,11 @@ var App = React.createClass({
               <option value="gjs.xhzctl.com"></option>
               <option value="gold888.safechaxun.com"></option>
               <option value="vip66.2008cml.net"></option>
+              <option value="gold.jychaxun.com"></option>
+              <option value="haic168.jrptchaxun.com"></option>
+              <option value="gold.jingu618.com"></option>
+              <option value="gold.jingu618.net"></option>
+              <option value="g.jingu618.cn"></option>
             </datalist>
 
              &nbsp;
@@ -165,7 +170,7 @@ var App = React.createClass({
                 nextPageLabel='下一页' 
             />
             &nbsp;
-            <span>{ (this.state.dataRows.length === 100) ? '仅显示前100条记录' : '共 '+this.state.dataRows.length+' 条记录' }</span>
+            <span>{ this.state.dataRows.length ? '共 '+this.state.dataRows.length+' 条记录' : '' }</span>
 
             <br /><br />
 
@@ -177,7 +182,7 @@ var App = React.createClass({
 
     doFilter: function(){
         $.post(
-            './get',
+            '/customers/get',
             {
                 includePhone: this.state.dataRowsState.includePhone,
                 fromDate: this.state.dataRowsState.exportFilter.fromDate,
