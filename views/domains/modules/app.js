@@ -6,50 +6,87 @@ class App extends React.Component{
 
     constructor(){
         super();
+
         this.state = {
             domainList: []
         };
     }
 
     componentDidMount(){
-        $.post('/domains/list', function(data){
-            if(data.length > 0){
-                this.setState({domainList: data})
-            }
-        }.bind(this));
+        this.refresh();
     }
 
+    refresh() {
+        $.post('/domains/list', (data)=>{
 
-
-    render() {
-        return (<div>
-            <h1> domains app</h1>
-            <AddDomain handleCreate={this.createDomain.bind(this)} />
-
-            <DomainList domains={this.state.domainList} />
-
-        </div>);
+            if(data.length > 0){
+                this.setState({domainList: data});
+            }
+        });
     }
 
     createDomain(domain, category, seo_name){
-        var component = this;
-        // var domain = this.refs.createInput.value;
+        let newDomainObj = { domain, category, seo_name };
         $.post(
             '/domains/add',
-            { domain: domain, category: category, seo_name: seo_name },
-             function(data){
+            newDomainObj,
+             (data)=>{
                 if(data.affectedRows === 1){
-                    component.state.domainList.push({domain:domain, category: category, seo_name: seo_name});
-                    component.setState({domainList:component.state.domainList })
+
+                     // 必须将最后插入的ID返回，传递给新组件，用于组件的后续操作（更新、删除等）
+                    newDomainObj.id = data.insertId;
+                    let dl = this.state.domainList;
+                    dl.push(newDomainObj);
+
+                    this.setState({ domainList: dl });
                 }
         });
     }
 
-    saveDomain(){
+    deleteDomain(itemId) {
+        $.post(
+            '/domains/delete',
+            {id: itemId },
+            (data) => {
+                if(data === 'deleted'){
+                    let domains = this.state.domainList;
+
+                    for (let i=0; i<domains.length; i++) {
+                        if ( domains[i].id === itemId ) {
+                            domains.splice(i, 1);
+
+                            this.setState({ domainList: domains });
+                            return;
+                        }
+                    }
+                }
+            }
+        );
     }
 
-    deleteDomain(){
+    updateDomain(sendData) {
 
+        $.post(
+            '/domains/update',
+            sendData,
+            (data) => {
+                if(data === 'updated'){
+                    this.refresh();
+                }
+            }
+        );
+
+    }
+
+    render() {
+        return (<div>
+            <AddDomain handleCreate={this.createDomain.bind(this)} />
+            <DomainList 
+                domains={this.state.domainList}
+                deleteDomain={this.deleteDomain.bind(this)} 
+                updateDomain={this.updateDomain.bind(this)} 
+            />
+        </div>); ///
     }
 
 }

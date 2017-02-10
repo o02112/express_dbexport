@@ -41,6 +41,7 @@ $(function(){
 
         // 登录过时处理
         $.post('/getLoginStatus', function(data){
+
             if(data.code === '1') {
                 loadPage(href,title);
             } else {
@@ -77,5 +78,23 @@ $(function(){
         $('.breadcrumb .active').text(pageTitle);
         $('title').text('智成天朗 | '+pageTitle);
     }
+
+
+    // 用户登录设置cookie
+    var username = getCookie('username');
+    $('.the-username').text(username);
+
+    function getCookie(cookieKey){
+        var cookieValue = '';  
+        var cookieAry = document.cookie.split("; "); // 所有Cookie  
+        for(var i=0;i<cookieAry.length;i++){  
+            var temp = cookieAry[i].split("=");  
+            if(temp[0] == cookieKey){  
+                 cookieValue = unescape(temp[1]);  
+            }  
+        }  
+        return cookieValue;  
+    }
+
 
 });

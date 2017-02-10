@@ -4,53 +4,38 @@ export default class DomainListItem extends React.Component{
 
     constructor(props){
         super(props);
+
         this.state = {
-            data: props.domain,
+            domain: this.props.domain,
             isEditing: false
         };
     }
 
+    // componentWillReceiveProps() {
+    //     this.setState({ domain: this.props.domain })
+    // }
+
     handleEdit(){
-        this.state.isEditing = true;
-        this.setState(this.state);
+        this.setState({isEditing: true});
+    }
+    cancleEdit(){
+        this.setState({isEditing: false});
     }
 
-    handleDelete(){
-        var _this = this;
-        $.post(
-            './delete',
-            {id: this.state.data.id },
-            function(data){
-                if(data === 'deleted'){
-                    _this.props.rerender(this.state.data.id);
-                }
-
-            }
-        );
-    }
-
-    saveDomain(e){
+    updateDomain(e){
         e.preventDefault();
 
         var sendData = {
-            id: this.refs.id.value,
+            id: this.props.itemId,
             domain: this.refs.domain.value,
             category: this.refs.category.value,
             seo_name: this.refs.seo_name.value
         };
-        var _this = this;
 
-        $.post(
-            './update',
-            sendData,
-            function(data){
-                if(data === 'updated'){
-                    this.state.data = sendData;
-                    this.state.isEditing = false;
-                    this.setState(this.state);
-                }
-            }.bind(this)
-        );
+        this.props.updateDomain(sendData);
+
+        this.setState({ isEditing: false });
+
     }
 
     renderItem(){
@@ -58,13 +43,12 @@ export default class DomainListItem extends React.Component{
         if(this.state.isEditing) {
             return (<tr>
                 <td colSpan="4">
-                    <form onSubmit={this.saveDomain.bind(this)}>
-                        <input type="hidden" ref="id" defaultValue={this.state.data.id} />
-                        <input type="text" ref="domain" defaultValue={this.state.data.domain} />
-                        <input type="text" ref="category" defaultValue={this.state.data.category} />
-                        <input type="text" ref="seo_name" defaultValue={this.state.data.seo_name} />
-                        <button type="submit">保存</button>
-                        <button>取消</button>
+                    <form onSubmit={this.updateDomain.bind(this)}>
+                        <input type="text" ref="domain" defaultValue={this.props.domain.domain} />
+                        <input type="text" ref="category" defaultValue={this.props.domain.category} />
+                        <input type="text" ref="seo_name" defaultValue={this.props.domain.seo_name} />
+                        <button type="submit" className="btn btn-primary btn-flat">保存</button>
+                        <button onClick={this.cancleEdit.bind(this)} className="btn btn-default btn-flat">取消</button>
                     </form>
                 </td>
             </tr>)
@@ -72,12 +56,18 @@ export default class DomainListItem extends React.Component{
 
         return (
             <tr>
-                <td>{this.state.data.domain}</td>
-                <td>{this.state.data.category}</td>
-                <td>{this.state.data.seo_name}</td>
+                <td>{this.props.domain.domain}</td>
+                <td>{this.props.domain.category}</td>
+                <td>{this.props.domain.seo_name}</td>
                 <td>
-                    <button onClick={this.handleEdit.bind(this)}>编辑</button>
-                    <button onClick={this.handleDelete.bind(this)}>删除</button>
+                    <button 
+                        onClick={this.handleEdit.bind(this)}
+                        className="btn btn-warning btn-flat"
+                    >编辑</button>
+                    <button 
+                        onClick={() => this.props.deleteDomain(this.props.itemId)}
+                        className="btn btn-danger btn-flat"
+                    >删除</button>
                 </td>
             </tr>
         )

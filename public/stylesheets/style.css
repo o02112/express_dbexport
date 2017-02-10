@@ -8,15 +8,13 @@ a {
 }
 .t-right { text-align: right; }
 
-table { cursor:default; color:#444; border-top:1px solid #eee; border-bottom:8px solid #eee; }
+table { cursor:default; color:#444; border-top:1px solid #eee; margin:8px 0; border-bottom:8px solid #eee; }
 tbody { border-top:1px solid #eee; }
 tr:nth-child(2n+0) { background-color:#f0f0f0; }
 tr.isnew { background-color:#eaf9d2; }
 th, tr:hover { background-color:#e0e0e0; }
 th { min-width:65px; }
 td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; white-space: nowrap; }
-
-#app { padding: 50px; }
 
 .table { width:100%; }
 

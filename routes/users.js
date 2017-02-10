@@ -8,21 +8,29 @@ Router.post('/doLogin', function(req, res){
     var username = req.body.username;
     var pass = req.body.password;
 
-    var sql = 'select checked from users where username= ? and password = md5(?)';
+    var sql = 'select checked, permission from users where username= ? and password = md5(?)';
 
     mysqlPool.doquery(sql, [username, pass], function(result){
+
         if(result.length !== 1) {
+
             access_log(username, 'f');
             res.json({code: '0', message: '用户名或密码错误，登陆失败。'});
-        } else if(result[0].checked[0] === 0) {
+
+        } else if(result[0].checked[0] === 0) { // 账户是否通过审核判断
+
+
             access_log(username, 'f');
             res.json({code: '2', message: '用户已注册，但未通过审核，登录失败。'});
+
         } else {
+
             access_log(username, 's');
 
             // 将用户登陆成功信息写入session
             var sess = req.session;
             sess.isLogin = true;
+            sess.permission = result[0].permission;
 
             res.json({code: '1', message: '用户存在，登陆成功。'})
         }

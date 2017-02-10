@@ -35,8 +35,8 @@ app.use('/public', express.static( path.join(__dirname, 'public')));
 app.use(session({
  secret: 'zctl.secret', 
  resave: false,
- saveUninitialized: false
- // cookie: { maxAge: 3600000 }
+ saveUninitialized: false,
+ // cookie: { secure: true }
 }));
 
 app.use(function(req, res, next){
@@ -44,7 +44,7 @@ app.use(function(req, res, next){
     var reg = /\/users\//; // 用户登录、注册等
     // var reg_socket = /\/socket.io\//;
     var reg_addNew = /\/customers\/addNew/; // 单页上的表单提交
-
+    
     if (
       sess.isLogin ||
       reg.test(req.path) ||

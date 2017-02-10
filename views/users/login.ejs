@@ -163,6 +163,8 @@
           } else if(data.code === '2') {
             $('#login-error-text').text('账号未通过审核，登录失败。请联系系统管理员。').show();
           } else {
+
+            // 登陆成功
             document.cookie = 'username='+username + '; path=/';
             window.location.href='/'+location.hash;
           }

@@ -1,12 +1,10 @@
 var express = require('express');
 var Router = express.Router();
 var csv = require('express-csv');
+var session = require('express-session');
+
 var mysqlPool = require('../modules/mysql_pool');
 
-
-// Router.get('/', function(req, res, next){
-// 	res.end();
-// });
 
 Router.get('/dbex', function(req, res, next){
 
@@ -15,11 +13,12 @@ Router.get('/dbex', function(req, res, next){
 });
 
 Router.get('/datatable', function(req, res, next){
-
 	res.render('customers/index');
-
 });
 
+Router.get('/datatable/phone', function(req, res, next){
+	res.render('customers/index');
+});
 
 Router.post('/get', function(req, res, next){ // 请求数据
 
@@ -29,7 +28,9 @@ Router.post('/get', function(req, res, next){ // 请求数据
 		domain = req.body.domain,
 		includePhone = req.body.includePhone;
 
-	if(includePhone === '1'){
+	var pm = getExportPhonePermission(req);
+
+	if((includePhone == '1') && ( req.session.permission >= pm ) ){
 		var mobile = " mobile as '电话',  ";
 	} else {
 		var mobile = '';
@@ -69,7 +70,9 @@ Router.post('/exportResource', function(req, res, next){ // 导出
 		dbTable = 'platform1'
 		mobile = '';
 
-	if(req.body.includePhone === '1'){
+	var pm = getExportPhonePermission(req);
+
+	if((req.body.includePhone == '1') && ( req.session.permission >= pm ) ){
 		var mobile = ' mobile as "电话", ';
 	}
 
@@ -228,6 +231,23 @@ Router.get('/ip', function(req, res){
 	res.send(ip);
 
 })
+
+
+function getExportPhonePermission(req) {
+  var sess = req.session,
+  	permissions = sess.permissions, // 得到数据库中所有权限数据
+  	pm = null;
+
+	// 获取本项操作所需权限
+	for (var i=0; i<permissions.length; i++) {
+		if ( permissions[i].name === 'export_customer_phone' ){
+			pm = permissions[i].value; // 导出客户电话号码所需权限值
+			break;
+		}
+	}
+
+	return pm;
+}
 
 
 module.exports = Router;

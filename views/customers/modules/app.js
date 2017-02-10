@@ -43,7 +43,7 @@ var App = React.createClass({
                     domain: '',
                 }
             },
-            
+            domainDropdown: []
             // urlTimeLineData: [],
         };
     },
@@ -51,7 +51,7 @@ var App = React.createClass({
     componentDidMount: function(){
 
         // 默认请求数据
-        if(window.location.href.indexOf('dbex') > 0 ){
+        if( window.location.href.indexOf('phone') > 0 ){
             this.state.dataRowsState.includePhone = 1;
         }
 
@@ -69,7 +69,24 @@ var App = React.createClass({
             }, 'json'
         );
 
+        let html = [];
+        $.post(
+            '/domains/list',
+            (data) => {
+                if (data.length > 0) {
+                    for (let i=0; i<data.length; i++) {
+                        html.push(
+                            <option key={i}>{data[i].domain}</option>
+                        ); ///
+                    }
+                    
+                    this.setState({ domainDropdown: html });
+                }
+            }
+        );
+
     },
+
 
     render: function(){
         let i = 0;
@@ -140,17 +157,10 @@ var App = React.createClass({
 
             &nbsp;
             
-            <input list="domains" placeholder="地址（example.com/hq）" className="input-text"
+            <input list="domains" placeholder="地址（example.com）" className="input-text"
                 onChange={(e)=>this.state.dataRowsState.exportFilter.domain = e.target.value} />
             <datalist id="domains">
-              <option value="gjs.xhzctl.com"></option>
-              <option value="gold888.safechaxun.com"></option>
-              <option value="vip66.2008cml.net"></option>
-              <option value="gold.jychaxun.com"></option>
-              <option value="haic168.jrptchaxun.com"></option>
-              <option value="gold.jingu618.com"></option>
-              <option value="gold.jingu618.net"></option>
-              <option value="g.jingu618.cn"></option>
+              {this.state.domainDropdown}
             </datalist>
 
              &nbsp;

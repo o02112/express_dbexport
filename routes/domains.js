@@ -36,7 +36,7 @@ Router.post('/countAll/:days', function(req, res){
         if(i > days){
             res.send(resultObj);
             return;
-        } 
+        }
 
 
         year = d.getFullYear();
@@ -76,9 +76,7 @@ Router.post('/list', function(req, res){
     var sql = 'select id, domain, category, seo_name from domains';
     
     mysqlPool.doquery(sql, [], function(result, fields){
-
         res.json(result);
-        // res.status(200).send('abc');
     });
 
 });
@@ -97,10 +95,11 @@ Router.post('/add', function(req, res){
 Router.post('/delete', function(req, res){
     var sql = 'delete from domains where id= ?';
     mysqlPool.doquery(sql, [req.body.id], function(result){
+        console.log(req.body.id);
         if(result.affectedRows === 1) {
             res.send('deleted');
         } else {
-            re.send('error');
+            res.send('error');
         }
     })
     

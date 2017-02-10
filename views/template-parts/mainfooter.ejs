@@ -66,27 +66,6 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/public/dist/js/demo.js"></script>
 <script src="/public/javascripts/zctl.admin.js"></script>
-<script>
-$(function(){
 
-  // 用户登录设置cookie
-  var username = getCookie('username');
-  $('.the-username').text(username);
-
-
-function getCookie(cookieKey){
-    var cookieValue = '';  
-    var cookieAry = document.cookie.split("; "); // 所有Cookie  
-    for(var i=0;i<cookieAry.length;i++){  
-        var temp = cookieAry[i].split("=");  
-        if(temp[0] == cookieKey){  
-             cookieValue = unescape(temp[1]);  
-        }  
-    }  
-    return cookieValue;  
-}
-
-});
-</script>
 </body>
 </html>

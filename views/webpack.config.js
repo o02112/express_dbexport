@@ -17,15 +17,15 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production')
+			}
+		}),
 		new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false
         }
-      })
-	// ,new webpack.DefinePlugin({  // 设置nodejs 运行环境 
-	// 	'process.env': {
-	// 		'NODE_ENV': JSON.stringify('production')
-	// 	}
-	// })
+    })
 	]
 }
