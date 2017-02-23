@@ -12,12 +12,32 @@ Router.get('/', function(req, res){
 
 
 Router.post('/count/:how', function(req, res){
-    var table_view = 'count_' + req.params.how;
-    var sql = 'select domain, total from ' + table_view;
-    
-    mysqlPool.doquery(sql, [], function(result, fields){
-        res.json(result);
-    });
+
+    if (req.params.how === 'custom') {
+
+        var sql = "SELECT `d`.`domain` AS `domain` , COUNT( `p`.`id` ) AS `total` " +
+            "FROM ( " +
+            "`platform1`.`domains` `d` " +
+            "LEFT JOIN `platform1`.`platform1` `p` ON ( ( " +
+            "( "+
+            "`p`.`url` LIKE CONCAT( '%', `d`.`domain` , '%' ) ) " +
+            "AND ( " +
+            "`p`.`submitted`  >= ? and `p`.`submitted` <= ? " +
+            " )))) " +
+            " GROUP BY `d`.`domain` "
+
+        mysqlPool.doquery(sql, [req.body.fromDate, req.body.toDate], function(result){
+            res.json(result);
+        });
+
+    } else {
+        
+        var sql = 'select domain, total from ' + 'count_' + req.params.how;
+        
+        mysqlPool.doquery(sql, [], function(result, fields){
+            res.json(result);
+        });
+    }
 });
 
 Router.post('/countAll/:days', function(req, res){

@@ -1,0 +1,187 @@
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">单个域名</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                
+                <div class="col-md-4">
+                  <form role="form" id="filter-form">
+
+                    <div class="form-group">
+                      <label htmlFor="filter_type">筛选数据</label>
+                        <select name="filter_type" id="filter_type" class="form-control">
+                          <option value="today">今天</option>
+                          <option value="yestoday">昨天</option>
+                          <option value="week">近7天</option>
+                          <option value="month">近30天</option>
+                          <option value="custom">自定义日期</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-group" id="dropdown-date" style="display: none;"></div>
+
+                    <div class="form-group">
+                      <button 
+                        type="submit"
+                        class="btn btn-block btn-default"
+                      >筛选</button>
+                    </div>
+
+                  </form>
+                </div>
+
+                <div class="col-md-8">
+                  <p class="text-center">
+                    <strong>筛选结果（<span id="filter-title"></span>）</strong>
+                  </p>
+                  <div id="countings"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        </div>
+
+
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">全部域名</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+
+              <p class="text-center">
+                <strong>提交总计: 
+                  <span id="from-date"></span>
+                   - 
+                  <span id="to-date"></span>
+                </strong>
+              </p>
+
+              <div class="chart">
+                <!-- Sales Chart Canvas -->
+                <canvas id="salesChart" style="height: 250px;"></canvas>
+              </div>
+
+              </div>
+            </div>
+        </div>
+      </div>
+      <!-- /.row -->
+
+
+<!-- ChartJS 1.0.1 -->
+<script src="/public/plugins/chartjs/Chart.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/public/dist/js/pages/dashboard2.js"></script>
+<script>
+$(function(){
+
+  // 各地址筛选统计
+  $('#filter_type').change(function(){
+    var how = $(this).val();
+
+    if ( how === 'custom' ) {
+      $('#dropdown-date').show();
+    } else {
+      $('#dropdown-date').hide();
+    }
+  });
+
+
+  $('#filter-form').submit(filterData);
+
+  filterData();
+
+  function filterData(e){
+    if (e) e.preventDefault();
+
+    var how = $('#filter_type').val(),
+      sendData = {};
+
+
+    if (how === 'custom') {
+      var fromDate = $('#dropdown-date input').eq(0).val();
+      var toDate = $('#dropdown-date input').eq(1).val();
+      sendData = {
+        fromDate: fromDate,
+        toDate: toDate
+      }
+    }
+    how = how || 'today';
+    var html = '';
+    var colors = ['green', 'red', 'aquq', 'yellow'];
+    var comparePercent = '';
+
+    // 获取域名列表
+    $.post(
+      '/domains/count/'+how, 
+      sendData,
+      function(data){
+        var maxTotal = theMaxTotal(data);
+
+        for(var i=0, j=0;i<data.length; i++){
+          
+          if(j>=colors.length) j=0;
+
+          comparePercent = data[i].total / maxTotal * 100 + '%';
+
+          html += '<div class="progress-group"> \
+            <span class="progress-text">'+ data[i].domain +'</span> \
+            <span class="progress-number"><b>'+data[i].total+'</b>/'+maxTotal+'</span> \
+            <div class="progress sm"> \
+              <div class="progress-bar progress-bar-'+ colors[j] +'" style="width: '+ comparePercent +'"></div> \
+            </div> \
+          </div>';
+
+          j++;
+        }
+      $('#countings').html(html);
+
+      var filterTitle = $('#filter_type option:checked').text();
+      if (filterTitle === '自定义日期') {
+        filterTitle = fromDate + ' ~ ' + toDate;
+      }
+      $('#filter-title').text(filterTitle);
+    });
+
+  }
+
+
+
+  function theMaxTotal(arr){
+    var tmpTotal = 0;
+    for(var i=0; i<arr.length; i++){
+      if(arr[i].total > tmpTotal){
+        tmpTotal = arr[i].total;
+      }
+    }
+    return tmpTotal;
+  }
+
+
+
+
+});
+</script>
+
+<script src="/public/javascripts/bundle_dashboard.js"></script>

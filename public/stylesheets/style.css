@@ -41,4 +41,5 @@ td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-br
 background-image: url(../../public/images/arrow-up.png);
 }
 
-.input-text { padding:5px; border:1px solid gray; }
+.input-text { padding:5px; border:1px solid gray; width:220px; }
+

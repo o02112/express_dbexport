@@ -28,7 +28,7 @@ Router.get('/', function(req, res){
 })
 
 Router.get('/dashboard', function(req, res){
-  res.render('template-parts/dashboard');
+  res.render('dashboard/index');
 })
 
 Router.post('/getLoginStatus', function(req, res){

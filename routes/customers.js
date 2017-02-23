@@ -6,21 +6,21 @@ var session = require('express-session');
 var mysqlPool = require('../modules/mysql_pool');
 
 
-Router.get('/dbex', function(req, res, next){
+Router.get('/dbex', function(req, res){
 
 	res.render('customers/index');
 
 });
 
-Router.get('/datatable', function(req, res, next){
-	res.render('customers/index');
+Router.get('/datatable', function(req, res){
+	res.render('customers/index', { findMobile: false });
 });
 
-Router.get('/datatable/phone', function(req, res, next){
-	res.render('customers/index');
+Router.get('/datatable/phone', function(req, res){
+	res.render('customers/index', { findMobile: true });
 });
 
-Router.post('/get', function(req, res, next){ // 请求数据
+Router.post('/get', function(req, res){ // 请求数据
 
 	var dbTable = 'platform1',
 		fromDate = req.body.fromDate,
@@ -58,14 +58,33 @@ Router.post('/get', function(req, res, next){ // 请求数据
 		url as '地址', referrer  as '来源地址' \
 		from "+ dbTable + where +" order by submitted desc "; // limit 0, 100 ";
 
-	mysqlPool.doquery(sql, [], function(result, fields){
+	mysqlPool.doquery(sql, [], function(result){
 
 		res.json(result);
 		// res.status(200).send('abc');
 	});
 });
 
-Router.post('/exportResource', function(req, res, next){ // 导出
+Router.post('/findMobile', function(req, res){ // 查找手机号码
+
+	var sql = "select id as '序号',  \
+		case when is_new=1 then '1' else '0' end as '新记录', \
+		name as '名称',  mobile as '电话',  \
+		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间',  \
+		category as '分类', user_action as '动作',  \
+		url as '地址', referrer  as '来源地址' \
+		from platform1 where mobile like concat('%', ?, '%') order by submitted desc ";
+
+		mysqlPool.doquery(sql, [req.body.mobile], function(result) {
+			if(result.length > 0){
+				res.json(result);
+			} else {
+				res.json({ code: '0', message: '查询结果为空。'})
+			}
+		})
+});
+
+Router.post('/exportResource', function(req, res){ // 导出
 	var dataCate = req.body.dataCate,
 		dbTable = 'platform1'
 		mobile = '';
@@ -131,7 +150,7 @@ Router.post('/exportResource', function(req, res, next){ // 导出
 
 });
 
-Router.post('/markOld', function(req, res, next){ // 新数据导出 - 做旧
+Router.post('/markOld', function(req, res){ // 新数据导出 - 做旧
 	// mark old;
 	var sql = 'update platform1 set is_new=0 where is_new=1';
 
@@ -156,9 +175,16 @@ Router.post('/markOld', function(req, res, next){ // 新数据导出 - 做旧
 // 	})
 // });
 
-Router.post('/addNew', function(req, res, next){ // 单页提交数据
+Router.post('/addNew', function(req, res){ // 单页提交数据
+
+
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+	if( ! checkMobile(req.body.mobile)) {
+		res.send('faile');
+		return;
+	}
 
   	var sql = 'insert into platform1 set ?';
 
@@ -231,6 +257,12 @@ Router.get('/ip', function(req, res){
 	res.send(ip);
 
 })
+
+function checkMobile(mobile){
+    var partten = /^1[3-9]\d{9}$/;
+
+    return partten.test(mobile);
+}
 
 
 function getExportPhonePermission(req) {
