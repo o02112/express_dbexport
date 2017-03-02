@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2017 年 02 月 10 日 10:08
+-- 生成日期: 2017 年 03 月 02 日 18:02
 -- 服务器版本: 5.5.40
--- PHP 版本: 5.3.29
+-- PHP 版本: 5.4.33
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `domains` (
   `category` varchar(255) DEFAULT NULL COMMENT '页面内容分类，如：白银、行情等',
   `seo_name` varchar(255) DEFAULT NULL COMMENT '搜索引擎名称，如：百度，360搜索',
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='保存在使用中的推广域名' AUTO_INCREMENT=87 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='保存在使用中的推广域名' AUTO_INCREMENT=90 ;
 
 -- --------------------------------------------------------
 
@@ -132,14 +132,16 @@ CREATE TABLE IF NOT EXISTS `platform1` (
   `submitted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `name` varchar(8) NOT NULL,
   `mobile` char(11) NOT NULL,
+  `mobile_address` varchar(16) DEFAULT NULL COMMENT '手机号归属地',
   `referrer` varchar(255) DEFAULT NULL,
+  `referrer_keyword` varchar(32) DEFAULT NULL COMMENT '搜索关键字',
   `category` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `user_action` varchar(32) NOT NULL,
   `is_new` bit(1) NOT NULL DEFAULT b'1',
   `remote_ip` varchar(128) DEFAULT '' COMMENT '远程客户端IP地址',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=264 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=274 ;
 
 -- --------------------------------------------------------
 
@@ -225,7 +227,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `count_yestoday`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `count_yestoday` AS select `d`.`domain` AS `domain`,count(`p`.`id`) AS `total` from (`domains` `d` left join `platform1` `p` on(((`p`.`url` like concat('%',`d`.`domain`,'%')) and (`p`.`submitted` > (curdate() - interval 1 day))))) group by `d`.`domain`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `count_yestoday` AS select `d`.`domain` AS `domain`,count(`p`.`id`) AS `total` from (`domains` `d` left join `platform1` `p` on(((`p`.`url` like concat('%',`d`.`domain`,'%')) and ((to_days(now()) - to_days(`p`.`submitted`)) = 1)))) group by `d`.`domain`;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

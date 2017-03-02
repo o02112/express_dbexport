@@ -13,11 +13,11 @@ Router.get('/dbex', function(req, res){
 });
 
 Router.get('/datatable', function(req, res){
-	res.render('customers/index', { findMobile: false });
+	res.render('customers/index', { findMobile: false, phoneVolumn: false });
 });
 
 Router.get('/datatable/phone', function(req, res){
-	res.render('customers/index', { findMobile: true });
+	res.render('customers/index', { findMobile: true, phoneVolumn: true });
 });
 
 Router.post('/get', function(req, res){ // 请求数据
@@ -53,9 +53,11 @@ Router.post('/get', function(req, res){ // 请求数据
 	var sql = "select id as '序号',  \
 		case when is_new=1 then '1' else '0' end as '新记录', \
 		name as '名称', "+ mobile + " \
+		mobile_address as '号码归属地', \
 		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间',  \
 		category as '分类', user_action as '动作',  \
-		url as '地址', referrer  as '来源地址' \
+		url as '地址', referrer  as '来源地址', \
+		referrer_keyword as '搜索输入' \
 		from "+ dbTable + where +" order by submitted desc "; // limit 0, 100 ";
 
 	mysqlPool.doquery(sql, [], function(result){
@@ -70,9 +72,11 @@ Router.post('/findMobile', function(req, res){ // 查找手机号码
 	var sql = "select id as '序号',  \
 		case when is_new=1 then '1' else '0' end as '新记录', \
 		name as '名称',  mobile as '电话',  \
+		mobile_address as '号码归属地', \
 		date_format(submitted, '%Y-%m-%d %H:%i:%s') as '时间',  \
 		category as '分类', user_action as '动作',  \
-		url as '地址', referrer  as '来源地址' \
+		url as '地址', referrer  as '来源地址', \
+		referrer_keyword as '搜索输入' \
 		from platform1 where mobile like concat('%', ?, '%') order by submitted desc ";
 
 		mysqlPool.doquery(sql, [req.body.mobile], function(result) {
@@ -95,11 +99,12 @@ Router.post('/exportResource', function(req, res){ // 导出
 		var mobile = ' mobile as "电话", ';
 	}
 
-	var sqlCols = 'id as "序号", name as "名称", ' + mobile +
-		' category as "分类", \
-		 user_action as "动作", \
-		 date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间", \
-		 url as "地址" ';
+	var sqlCols = 'id as "序号", name as "名称", ' + mobile +' \
+		mobile_address as "号码归属地", \
+		category as "分类", \
+		user_action as "动作", \
+		date_format(submitted, "%Y-%m-%d %H:%i:%s") as "时间", \
+		url as "地址" ';
 
 	var sql = 'select ' + sqlCols + ' from ' + dbTable;
 
@@ -163,20 +168,8 @@ Router.post('/markOld', function(req, res){ // 新数据导出 - 做旧
 	})
 });
 
-// Router.post('/looping', function(req, res, next){ 
-// 	var sql = 'select count(*) as count from platform1 where is_new=1';
-// 	mysqlPool.doquery(sql, [], function(result){
-// 		if(result[0].count > 0){
-// 			res.json({code: 1, message: '有新资源产生。'});
-// 		} else {
-// 			res.json({code: 0, message: '无新数据。'});
-// 		}
-// 		// res.json(result[0].count);
-// 	})
-// });
 
 Router.post('/addNew', function(req, res){ // 单页提交数据
-
 
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -186,7 +179,7 @@ Router.post('/addNew', function(req, res){ // 单页提交数据
 		return;
 	}
 
-  	var sql = 'insert into platform1 set ?';
+  var sql = 'insert into platform1 set ?';
 
 	var sql_exists = 'select id from platform1 where mobile=?';
 
@@ -225,25 +218,6 @@ Router.post('/addNew', function(req, res){ // 单页提交数据
 	});
 });
 
-// Router.post('/urlTimeLine', function(req, res, url){ // 按月统计每个地址的提交
-// 	var sql = `select DATE_FORMAT(submitted,'%Y-%m') as '日期',
-// 		 url as '地址',count(*) as '总计' from platform1 
-// 		 group by url, DATE_FORMAT(submitted,'%Y-%m') 
-// 		 order by url desc`;
-	
-// 	var sql = 'SELECT url FROM platform1 GROUP BY url';
-// 	var urls = [];
-
-// 	mysqlPool.doquery(sql, [], function(result){
-// 		if(result.length > 0){
-// 			urls = result;
-// 		} else {
-			
-// 		}
-// 	});
-
-	
-// });
 
 
 Router.get('/ip', function(req, res){

@@ -42,13 +42,13 @@ app.use(session({
 app.use(function(req, res, next){
     var sess = req.session;
     var reg = /\/users\//; // 用户登录、注册等
-    // var reg_socket = /\/socket.io\//;
+    var reg_test = /\/test\//;
     var reg_addNew = /\/customers\/addNew/; // 单页上的表单提交
     
     if (
       sess.isLogin ||
       reg.test(req.path) ||
-      // reg_socket.test(req.path) ||
+      reg_test.test(req.path) ||
       reg_addNew.test(req.path) 
     ) {
       next();
@@ -60,7 +60,7 @@ app.use(function(req, res, next){
 
 
 app.use('/', index);
-app.use('/test', test);
+// app.use('/test', test);
 app.use('/domains', domains);
 app.use('/customers', customers);
 app.use('/users', users);

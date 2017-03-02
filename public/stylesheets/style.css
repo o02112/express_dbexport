@@ -14,7 +14,7 @@ tr:nth-child(2n+0) { background-color:#f0f0f0; }
 tr.isnew { background-color:#eaf9d2; }
 th, tr:hover { background-color:#e0e0e0; }
 th { min-width:65px; }
-td { padding:5px; height:1em; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; white-space: nowrap; }
+td { padding:5px; height:1em; max-width: 220px; overflow: hidden; text-overflow: ellipsis; word-break: keep-all; white-space: nowrap; }
 
 .table { width:100%; }
 
