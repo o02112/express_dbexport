@@ -1,10 +1,8 @@
 var express = require('express');
 var Router = express.Router();
-var mysqlPool = require('../modules/mysql_pool');
 
 
 var wechatNumberArr = ['zctl111111','zctl222222','zctl333333','zctl444444','zctl555555','zctl-12345679','zctl777777','fc11883399'];
-
 
 var i = 0;
 var wechatNumber;
@@ -16,18 +14,13 @@ var getNumber = function() {
 	wechatNumber = wechatNumberArr[i-1];
 }
 
-setInterval(getNumber, 1000);
-
-// Access the session as req.session
-Router.get('/', function(req, res) {
-
-  res.send('test');
-
-});
+setInterval(getNumber, 60 * 10 * 1000); // 10 分钟 换一个微信号
 
 Router.get('/wechatNumber', function (req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
 	res.send(wechatNumber);
 });
-
 
 module.exports = Router;

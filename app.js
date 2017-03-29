@@ -9,6 +9,7 @@ var session = require('express-session');
 
 var index = require('./routes/index');
 var test = require('./routes/test');
+var timer = require('./routes/timer');
 var domains = require('./routes/domains');
 var customers = require('./routes/customers');
 var users = require('./routes/users');
@@ -43,12 +44,14 @@ app.use(function(req, res, next){
     var sess = req.session;
     var reg = /\/users\//; // 用户登录、注册等
     var reg_test = /\/test\//;
+    var reg_timer = /\/timer\//;
     var reg_addNew = /\/customers\/addNew/; // 单页上的表单提交
     
     if (
       sess.isLogin ||
       reg.test(req.path) ||
       reg_test.test(req.path) ||
+      reg_timer.test(req.path) ||
       reg_addNew.test(req.path) 
     ) {
       next();
@@ -60,7 +63,8 @@ app.use(function(req, res, next){
 
 
 app.use('/', index);
-// app.use('/test', test);
+app.use('/test', test);
+app.use('/timer', timer);
 app.use('/domains', domains);
 app.use('/customers', customers);
 app.use('/users', users);
