@@ -7,7 +7,7 @@ var wechatNumberArr = ['zctl111111','zctl222222','zctl333333','zctl444444','zctl
 
 
 var i = 0;
-var wechatNumber;
+var wechatNumber = wechatNumberArr[wechatNumberArr.length-1];
 var getNumber = function() {
 	i++;
 	if(i>wechatNumberArr.length) {
@@ -16,7 +16,7 @@ var getNumber = function() {
 	wechatNumber = wechatNumberArr[i-1];
 }
 
-setInterval(getNumber, 1000);
+setInterval(getNumber, 5*1000);
 
 // Access the session as req.session
 Router.get('/', function(req, res) {

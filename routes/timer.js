@@ -5,7 +5,7 @@ var Router = express.Router();
 var wechatNumberArr = ['zctl111111','zctl222222','zctl333333','zctl444444','zctl555555','zctl-12345679','zctl777777','fc11883399'];
 
 var i = 0;
-var wechatNumber;
+var wechatNumber = wechatNumberArr[wechatNumberArr.length-1];
 var getNumber = function() {
 	i++;
 	if(i>wechatNumberArr.length) {
